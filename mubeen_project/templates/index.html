@@ -421,10 +421,10 @@
             <div class="slider-field">
               <div class="slider-header">
                 <label>📅 Attendance Percentage</label>
-                <div class="slider-value-box" id="att-val">75%</div>
+                <div class="slider-value-box" id="att-val">0%</div>
               </div>
               <div class="slider-track">
-                <input type="range" id="attendance" min="0" max="100" value="75"
+                <input type="range" id="attendance" min="0" max="100" value="0"
                   oninput="updateSlider('attendance','att-val',this.value,'%');liveUpdate()">
               </div>
               <div class="slider-labels"><span>0%</span><span>50%</span><span>100%</span></div>
@@ -433,10 +433,10 @@
             <div class="slider-field">
               <div class="slider-header">
                 <label>📚 Daily Study Hours</label>
-                <div class="slider-value-box" id="hrs-val">4 hrs</div>
+                <div class="slider-value-box" id="hrs-val">0 hrs</div>
               </div>
               <div class="slider-track">
-                <input type="range" id="hour_study" min="0" max="16" value="4"
+                <input type="range" id="hour_study" min="0" max="16" value="0"
                   oninput="updateSlider('hour_study','hrs-val',this.value,' hrs');liveUpdate()">
               </div>
               <div class="slider-labels"><span>0</span><span>8</span><span>16</span></div>
@@ -574,8 +574,8 @@
           <div class="summary-list">
             <div class="s-item"><span class="s-key">Name</span><span class="s-val" id="s-name">—</span></div>
             <div class="s-item"><span class="s-key">Register No</span><span class="s-val" id="s-reg">—</span></div>
-            <div class="s-item"><span class="s-key">Attendance</span><span class="s-val" id="s-att">75%</span></div>
-            <div class="s-item"><span class="s-key">Study Hours</span><span class="s-val" id="s-hrs">4 hrs</span></div>
+            <div class="s-item"><span class="s-key">Attendance</span><span class="s-val" id="s-att">0%</span></div>
+            <div class="s-item"><span class="s-key">Study Hours</span><span class="s-val" id="s-hrs">0 hrs</span></div>
             <div class="s-item"><span class="s-key">Internal</span><span class="s-val" id="s-int">—</span></div>
             <div class="s-item"><span class="s-key">Projects</span><span class="s-val" id="s-proj">0</span></div>
             <div class="s-item"><span class="s-key">Internships</span><span class="s-val" id="s-intern">0</span></div>
@@ -610,16 +610,16 @@
             <div class="meter-row">
               <span class="m-label">Attendance</span>
               <div class="meter-bar">
-                <div class="meter-fill" id="m-att" style="width:75%"></div>
+                <div class="meter-fill" id="m-att" style="width:0%"></div>
               </div>
-              <span class="meter-val" id="mv-att">75</span>
+              <span class="meter-val" id="mv-att">0</span>
             </div>
             <div class="meter-row">
               <span class="m-label">Study Hours</span>
               <div class="meter-bar">
-                <div class="meter-fill" id="m-hrs" style="width:25%"></div>
+                <div class="meter-fill" id="m-hrs" style="width:0%"></div>
               </div>
-              <span class="meter-val" id="mv-hrs">4</span>
+              <span class="meter-val" id="mv-hrs">0</span>
             </div>
             <div class="meter-row">
               <span class="m-label">Internal</span>
