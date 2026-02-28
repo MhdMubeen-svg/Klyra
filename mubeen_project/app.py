@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, jsonify, session
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import date
+from ml_model import predict_student
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', os.urandom(24).hex())
@@ -48,9 +49,17 @@ def init_db():
             class_rank     TEXT DEFAULT '',
             score          INTEGER DEFAULT 0,
             level          TEXT DEFAULT 'basic',
+            dt_prediction  TEXT DEFAULT '',
+            rf_prediction  TEXT DEFAULT '',
             date_added     TEXT DEFAULT (date('now')),
             FOREIGN KEY (user_id) REFERENCES users(id)
         )''')
+        # ── Migrate existing DB: add ML columns if missing ──
+        cols = [row[1] for row in conn.execute('PRAGMA table_info(students)').fetchall()]
+        if 'dt_prediction' not in cols:
+            conn.execute("ALTER TABLE students ADD COLUMN dt_prediction TEXT DEFAULT ''")
+        if 'rf_prediction' not in cols:
+            conn.execute("ALTER TABLE students ADD COLUMN rf_prediction TEXT DEFAULT ''")
         conn.commit()
     finally:
         conn.close()
@@ -238,13 +247,25 @@ def api_add_student():
     arrears = safe_int(d.get('arrears', 0), 0, 0)
     level = get_level(score, arrears)
     today = date.today().strftime('%d/%m/%Y')
+
+    # ── ML Predictions ──
+    ml_result = predict_student(
+        attendance=safe_int(d.get('attendance', 0), 0, 0, 100),
+        internal=safe_int(d.get('internal', 0), 0, 0, 100),
+        study_hours=safe_int(d.get('hour_study', 0), 0, 0, 16),
+        arrears=arrears
+    )
+    dt_pred = ml_result['dt_prediction']
+    rf_pred = ml_result['rf_prediction']
+
     conn = get_db()
     try:
         cur = conn.execute('''INSERT INTO students
             (user_id,name,register_no,dept,semester,acad_year,gender,
              attendance,hour_study,internal,arrears,projects,internships,
-             sports,outer_programs,certs,leader,class_rank,score,level,date_added)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', (
+             sports,outer_programs,certs,leader,class_rank,score,level,
+             dt_prediction,rf_prediction,date_added)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', (
             u['id'], name, register_no,
             (d.get('dept') or '').strip(), (d.get('semester') or '').strip(),
             (d.get('acad_year') or '').strip(), (d.get('gender') or '').strip(),
@@ -253,14 +274,19 @@ def api_add_student():
             safe_int(d.get('projects', 0)), safe_int(d.get('internships', 0)),
             safe_int(d.get('sports', 0)), safe_int(d.get('outer_programs', 0)),
             safe_int(d.get('certs', 0)), safe_int(d.get('leader', 0)),
-            (d.get('class_rank') or '').strip(), score, level, today
+            (d.get('class_rank') or '').strip(), score, level,
+            dt_pred, rf_pred, today
         ))
         new_id = cur.lastrowid
         conn.commit()
         student = conn.execute('SELECT * FROM students WHERE id=?', (new_id,)).fetchone()
     finally:
         conn.close()
-    return jsonify({'ok': True, 'student': dict(student), 'score': score, 'level': level})
+    return jsonify({
+        'ok': True, 'student': dict(student),
+        'score': score, 'level': level,
+        'dt_prediction': dt_pred, 'rf_prediction': rf_pred
+    })
 
 @app.route('/api/students/<int:sid>', methods=['DELETE'])
 def api_delete_student(sid):

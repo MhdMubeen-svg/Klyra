@@ -6,7 +6,7 @@ let currentUser = null;
 let currentStep = 1;
 const TOTAL_STEPS = 4;
 
-let chipVals = { sports: 1, outer_programs: 2, leader: 0 };
+let chipVals = { sports: 0, outer_programs: 0, leader: 0 };
 
 // ═══════════════════════════════════════════
 // SAFE GET ELEMENT
@@ -319,15 +319,35 @@ function showPage(id) {
 // STEP NAVIGATION
 // ═══════════════════════════════════════════
 function goStep(dir) {
-  if (dir === 1 && currentStep === 1) {
-    // Validate step 1
-    const name = get('name')?.value?.trim();
-    const reg = get('register_no')?.value?.trim();
+  if (dir === 1) {
     let hasErr = false;
-    if (!name) { if (get('err-name')) get('err-name').textContent = 'Name is required'; hasErr = true; }
-    else { if (get('err-name')) get('err-name').textContent = ''; }
-    if (!reg) { if (get('err-reg')) get('err-reg').textContent = 'Register number is required'; hasErr = true; }
-    else { if (get('err-reg')) get('err-reg').textContent = ''; }
+    // ── Step 1: Basic Info ──
+    if (currentStep === 1) {
+      const name = get('name')?.value?.trim();
+      const reg = get('register_no')?.value?.trim();
+      const dept = get('dept')?.value;
+      const sem = get('semester')?.value;
+      const acad = get('acad_year')?.value;
+      const gender = get('gender')?.value;
+
+      if (!name) { if (get('err-name')) get('err-name').textContent = 'Name is required'; hasErr = true; }
+      else { if (get('err-name')) get('err-name').textContent = ''; }
+      if (!reg) { if (get('err-reg')) get('err-reg').textContent = 'Register number is required'; hasErr = true; }
+      else { if (get('err-reg')) get('err-reg').textContent = ''; }
+      if (!dept) { showToast('⚠️ Please select a Department'); hasErr = true; }
+      if (!sem) { showToast('⚠️ Please select a Semester'); hasErr = true; }
+      if (!acad) { showToast('⚠️ Please select Academic Year'); hasErr = true; }
+      if (!gender) { showToast('⚠️ Please select Gender'); hasErr = true; }
+    }
+    // ── Step 2: Academic ──
+    if (currentStep === 2) {
+      const att = parseInt(get('attendance')?.value || '0');
+      const hrs = parseInt(get('hour_study')?.value || '0');
+      const internal = get('internal')?.value?.trim();
+      if (att <= 0) { showToast('⚠️ Attendance must be greater than 0%'); hasErr = true; }
+      if (hrs <= 0) { showToast('⚠️ Study Hours must be greater than 0'); hasErr = true; }
+      if (!internal || internal === '' || isNaN(internal)) { showToast('⚠️ Internal Marks is required'); hasErr = true; }
+    }
     if (hasErr) return;
   }
 
@@ -669,15 +689,15 @@ function resetForm() {
   if (get('semester')) get('semester').selectedIndex = 0;
   if (get('acad_year')) get('acad_year').innerHTML = '<option value="">— Select department first —</option>';
   if (get('gender')) get('gender').selectedIndex = 0;
-  if (get('attendance')) { get('attendance').value = 75; updateSlider('attendance', 'att-val', '75', '%'); }
-  if (get('hour_study')) { get('hour_study').value = 4; updateSlider('hour_study', 'hrs-val', '4', ' hrs'); }
+  if (get('attendance')) { get('attendance').value = 0; updateSlider('attendance', 'att-val', '0', '%'); }
+  if (get('hour_study')) { get('hour_study').value = 0; updateSlider('hour_study', 'hrs-val', '0', ' hrs'); }
   if (get('internal')) get('internal').value = '';
   if (get('arrears')) get('arrears').value = '0';
   if (get('class_rank')) get('class_rank').value = '';
   if (get('projects')) get('projects').value = '0';
   if (get('internships')) get('internships').value = '0';
   if (get('certs')) get('certs').value = '0';
-  chipVals = { sports: 1, outer_programs: 2, leader: 0 };
+  chipVals = { sports: 0, outer_programs: 0, leader: 0 };
 
   currentStep = 1;
   updateStepUI();

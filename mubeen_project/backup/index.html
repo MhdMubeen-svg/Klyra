@@ -1,908 +1,1425 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mubeen — Student Performance System</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Klyra — A student performance evaluation and management system. Score, classify, and monitor student academic performance in real time.">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%236366f1'/><stop offset='100%25' stop-color='%23a855f7'/></linearGradient></defs><polygon points='50,10 85,35 75,80 25,80 15,35' fill='url(%23g)' rx='4'/><polygon points='50,22 72,40 65,70 35,70 28,40' fill='%23fff' opacity='.25'/></svg>">
+  <title>Klyra — Student Performance System</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
 
 
-<!-- ══════════════════════════════════════════════════════════ -->
-<!--  AUTH SCREEN                                              -->
-<!-- ══════════════════════════════════════════════════════════ -->
-<div id="authScreen">
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!--  AUTH SCREEN                                              -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div id="authScreen">
 
-  <!-- LEFT PANEL -->
-  <div class="auth-left">
-    <div class="auth-brand">
-      <div class="auth-brand-icon">
-        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-      </div>
-      <div class="auth-brand-name">Mubeen</div>
-    </div>
-
-    <h1 class="auth-headline">Track Student<br><em>Performance</em><br>Smarter.</h1>
-    <p class="auth-sub">A complete academic evaluation platform for Arts & Science and Engineering students — score, classify, and monitor in real time.</p>
-
-    <div class="auth-features">
-      <div class="auth-feature">
-        <div class="auth-feature-icon">📊</div>
-        <div class="auth-feature-text">
-          <div class="ft">Live Performance Scoring</div>
-          <div class="fs">Instant 0–100 score with 5 level classification</div>
+    <!-- LEFT PANEL -->
+    <div class="auth-left">
+      <div class="auth-brand">
+        <div class="auth-brand-icon">
+          <svg viewBox="0 0 24 24">
+            <defs>
+              <linearGradient id="klyraGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#818cf8" />
+                <stop offset="100%" stop-color="#c084fc" />
+              </linearGradient>
+            </defs>
+            <polygon points="12,2 21,8 18,20 6,20 3,8" fill="url(#klyraGrad)" stroke="none" />
+            <polygon points="12,5 18,9.5 16,17.5 8,17.5 6,9.5" fill="#fff" opacity=".2" stroke="none" />
+            <path d="M12,8 L15,12 L12,20 L9,12 Z" fill="#fff" opacity=".35" stroke="none" />
+          </svg>
         </div>
+        <div class="auth-brand-name">Klyra</div>
       </div>
-      <div class="auth-feature">
-        <div class="auth-feature-icon">🎓</div>
-        <div class="auth-feature-text">
-          <div class="ft">Arts & Science + Engineering</div>
-          <div class="fs">Supports 3-year and 4-year programmes</div>
+
+      <h1 class="auth-headline">Track Student<br><em>Performance</em><br>Smarter.</h1>
+      <p class="auth-sub">A complete academic evaluation platform for Arts & Science and Engineering students — score,
+        classify, and monitor in real time.</p>
+
+      <div class="auth-features">
+        <div class="auth-feature">
+          <div class="auth-feature-icon">📊</div>
+          <div class="auth-feature-text">
+            <div class="ft">Live Performance Scoring</div>
+            <div class="fs">Instant 0–100 score with 5 level classification</div>
+          </div>
         </div>
-      </div>
-      <div class="auth-feature">
-        <div class="auth-feature-icon">📈</div>
-        <div class="auth-feature-text">
-          <div class="ft">Analytics Dashboard</div>
-          <div class="fs">Visual charts, leaderboard & trends</div>
+        <div class="auth-feature">
+          <div class="auth-feature-icon">🎓</div>
+          <div class="auth-feature-text">
+            <div class="ft">Arts & Science + Engineering</div>
+            <div class="fs">Supports 3-year and 4-year programmes</div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- RIGHT PANEL -->
-  <div class="auth-right">
-
-    <!-- LOGIN PANEL -->
-    <div class="auth-form-panel active" id="panelLogin">
-      <div class="auth-title">Welcome back 👋</div>
-      <div class="auth-desc">Sign in to your account to continue</div>
-
-      <div id="loginAlert" class="auth-alert"></div>
-
-      <div class="auth-field">
-        <label>Username or Email</label>
-        <div class="auth-field-wrap">
-          <span class="field-icon">👤</span>
-          <input type="text" id="loginUser" placeholder="Enter your username or email" autocomplete="username">
+        <div class="auth-feature">
+          <div class="auth-feature-icon">📈</div>
+          <div class="auth-feature-text">
+            <div class="ft">Analytics Dashboard</div>
+            <div class="fs">Visual charts, leaderboard & trends</div>
+          </div>
         </div>
-        <span class="auth-err-msg" id="err-loginUser">Please enter your username or email</span>
-      </div>
-
-      <div class="auth-field">
-        <label>Password</label>
-        <div class="auth-field-wrap">
-          <span class="field-icon">🔒</span>
-          <input type="password" id="loginPw" placeholder="Enter your password" autocomplete="current-password">
-          <button class="show-pw-btn" type="button" onclick="togglePw('loginPw',this)">Show</button>
-        </div>
-        <span class="auth-err-msg" id="err-loginPw">Please enter your password</span>
-      </div>
-
-      <div style="display:flex;justify-content:flex-end;margin:-6px 0 16px">
-        <a onclick="showPanel('panelForgot')" style="font-size:.78rem;color:var(--accent);cursor:pointer;font-weight:600;">Forgot password?</a>
-      </div>
-
-      <button class="auth-btn" onclick="doLogin()">
-        Sign In →
-      </button>
-
-      <div class="auth-divider"><span>or</span></div>
-
-      <div class="auth-switch">
-        Don't have an account? <a onclick="showPanel('panelSignup')">Create one free →</a>
       </div>
     </div>
 
-    <!-- SIGNUP PANEL -->
-    <div class="auth-form-panel" id="panelSignup">
-      <div class="auth-title">Create Account 🚀</div>
-      <div class="auth-desc">Join Mubeen and start evaluating student performance</div>
+    <!-- RIGHT PANEL -->
+    <div class="auth-right">
 
-      <div id="signupAlert" class="auth-alert"></div>
+      <!-- LOGIN PANEL -->
+      <div class="auth-form-panel active" id="panelLogin">
+        <div class="auth-title">Welcome 👋</div>
+        <div class="auth-desc">Sign in to your account to continue</div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <div id="loginAlert" class="auth-alert"></div>
+
         <div class="auth-field">
-          <label>First Name</label>
+          <label>Username or Email</label>
           <div class="auth-field-wrap">
-            <span class="field-icon">✏️</span>
-            <input type="text" id="signupFirst" placeholder="First name">
+            <span class="field-icon">👤</span>
+            <input type="text" id="loginUser" placeholder="Enter your username or email" autocomplete="username">
           </div>
-          <span class="auth-err-msg" id="err-signupFirst">Required</span>
+          <span class="auth-err-msg" id="err-loginUser">Please enter your username or email</span>
         </div>
+
         <div class="auth-field">
-          <label>Last Name</label>
+          <label>Password</label>
           <div class="auth-field-wrap">
-            <span class="field-icon">✏️</span>
-            <input type="text" id="signupLast" placeholder="Last name">
+            <span class="field-icon">🔒</span>
+            <input type="password" id="loginPw" placeholder="Enter your password" autocomplete="current-password">
+            <button class="show-pw-btn" type="button" onclick="togglePw('loginPw',this)">Show</button>
+          </div>
+          <span class="auth-err-msg" id="err-loginPw">Please enter your password</span>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;margin:-6px 0 16px">
+          <a onclick="showPanel('panelForgot')"
+            style="font-size:.78rem;color:var(--accent);cursor:pointer;font-weight:600;">Forgot password?</a>
+        </div>
+
+        <button class="auth-btn" onclick="doLogin()">
+          Sign In →
+        </button>
+
+        <div class="auth-divider"><span>or</span></div>
+
+        <div class="auth-switch">
+          Don't have an account? <a onclick="showPanel('panelSignup')">Create one free →</a>
+        </div>
+      </div>
+
+      <!-- SIGNUP PANEL -->
+      <div class="auth-form-panel" id="panelSignup">
+        <div class="auth-title">Create Account 🚀</div>
+        <div class="auth-desc">Join Klyra and start evaluating student performance</div>
+
+        <div id="signupAlert" class="auth-alert"></div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div class="auth-field">
+            <label>First Name</label>
+            <div class="auth-field-wrap">
+              <span class="field-icon">✏️</span>
+              <input type="text" id="signupFirst" placeholder="First name">
+            </div>
+            <span class="auth-err-msg" id="err-signupFirst">Required</span>
+          </div>
+          <div class="auth-field">
+            <label>Last Name</label>
+            <div class="auth-field-wrap">
+              <span class="field-icon">✏️</span>
+              <input type="text" id="signupLast" placeholder="Last name">
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="auth-field">
-        <label>Username</label>
-        <div class="auth-field-wrap">
-          <span class="field-icon">👤</span>
-          <input type="text" id="signupUser" placeholder="Choose a username" autocomplete="username" oninput="checkUsername()">
+        <div class="auth-field">
+          <label>Username</label>
+          <div class="auth-field-wrap">
+            <span class="field-icon">👤</span>
+            <input type="text" id="signupUser" placeholder="Choose a username" autocomplete="username"
+              oninput="checkUsername()">
+          </div>
+          <span class="auth-err-msg" id="err-signupUser">Username already taken or invalid</span>
         </div>
-        <span class="auth-err-msg" id="err-signupUser">Username already taken or invalid</span>
-      </div>
 
-      <div class="auth-field">
-        <label>Email Address</label>
-        <div class="auth-field-wrap">
-          <span class="field-icon">📧</span>
-          <input type="email" id="signupEmail" placeholder="your@email.com" autocomplete="email">
+        <div class="auth-field">
+          <label>Email Address</label>
+          <div class="auth-field-wrap">
+            <span class="field-icon">📧</span>
+            <input type="email" id="signupEmail" placeholder="your@email.com" autocomplete="email">
+          </div>
+          <span class="auth-err-msg" id="err-signupEmail">Enter a valid email</span>
         </div>
-        <span class="auth-err-msg" id="err-signupEmail">Enter a valid email</span>
-      </div>
 
-      <div class="auth-field">
-        <label>Password</label>
-        <div class="auth-field-wrap">
-          <span class="field-icon">🔒</span>
-          <input type="password" id="signupPw" placeholder="Create a strong password" oninput="checkStrength()" autocomplete="new-password">
-          <button class="show-pw-btn" type="button" onclick="togglePw('signupPw',this)">Show</button>
+        <div class="auth-field">
+          <label>Password</label>
+          <div class="auth-field-wrap">
+            <span class="field-icon">🔒</span>
+            <input type="password" id="signupPw" placeholder="Create a strong password" oninput="checkStrength()"
+              autocomplete="new-password">
+            <button class="show-pw-btn" type="button" onclick="togglePw('signupPw',this)">Show</button>
+          </div>
+          <div class="strength-bar">
+            <div class="strength-fill" id="strengthFill"></div>
+          </div>
+          <div class="strength-label" id="strengthLabel" style="color:var(--muted)"></div>
+          <span class="auth-err-msg" id="err-signupPw">Password must be at least 6 characters</span>
         </div>
-        <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
-        <div class="strength-label" id="strengthLabel" style="color:var(--muted)"></div>
-        <span class="auth-err-msg" id="err-signupPw">Password must be at least 6 characters</span>
-      </div>
 
-      <div class="auth-field">
-        <label>Confirm Password</label>
-        <div class="auth-field-wrap">
-          <span class="field-icon">🔒</span>
-          <input type="password" id="signupPwConfirm" placeholder="Re-enter your password" autocomplete="new-password">
-          <button class="show-pw-btn" type="button" onclick="togglePw('signupPwConfirm',this)">Show</button>
+        <div class="auth-field">
+          <label>Confirm Password</label>
+          <div class="auth-field-wrap">
+            <span class="field-icon">🔒</span>
+            <input type="password" id="signupPwConfirm" placeholder="Re-enter your password"
+              autocomplete="new-password">
+            <button class="show-pw-btn" type="button" onclick="togglePw('signupPwConfirm',this)">Show</button>
+          </div>
+          <span class="auth-err-msg" id="err-signupPwConfirm">Passwords do not match</span>
         </div>
-        <span class="auth-err-msg" id="err-signupPwConfirm">Passwords do not match</span>
+
+        <div
+          style="background:rgba(37,99,235,.05);border:1px solid rgba(37,99,235,.12);border-radius:8px;padding:10px 13px;margin-bottom:14px">
+          <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:.78rem;color:var(--muted)">
+            <input type="checkbox" id="signupAgree" style="margin-top:2px;accent-color:var(--accent)">
+            <span>I agree to the <a style="color:var(--accent);font-weight:600;cursor:pointer"
+                onclick="event.stopPropagation();event.preventDefault();openLegalModal('tosModal')">Terms of Service</a>
+              and <a style="color:var(--accent);font-weight:600;cursor:pointer"
+                onclick="event.stopPropagation();event.preventDefault();openLegalModal('privacyModal')">Privacy
+                Policy</a></span>
+          </label>
+        </div>
+
+
+        <button class="auth-btn" onclick="doSignup()">
+          Create Account →
+        </button>
+
+        <div class="auth-switch">
+          Already have an account? <a onclick="showPanel('panelLogin')">Sign in →</a>
+        </div>
       </div>
 
-      <div style="background:rgba(37,99,235,.05);border:1px solid rgba(37,99,235,.12);border-radius:8px;padding:10px 13px;margin-bottom:14px">
-        <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:.78rem;color:var(--muted)">
-          <input type="checkbox" id="signupAgree" style="margin-top:2px;accent-color:var(--accent)">
-          <span>I agree to the <a style="color:var(--accent);font-weight:600">Terms of Service</a> and <a style="color:var(--accent);font-weight:600">Privacy Policy</a></span>
-        </label>
+      <!-- FORGOT PASSWORD PANEL -->
+      <div class="auth-form-panel" id="panelForgot">
+        <div style="font-size:2rem;margin-bottom:8px">🔑</div>
+        <div class="auth-title">Reset Password</div>
+        <div class="auth-desc">Enter your username and we'll show you a reset option</div>
+
+        <div id="forgotAlert" class="auth-alert"></div>
+
+        <div class="auth-field">
+          <label>Username</label>
+          <div class="auth-field-wrap">
+            <span class="field-icon">👤</span>
+            <input type="text" id="forgotUser" placeholder="Enter your username">
+          </div>
+          <span class="auth-err-msg" id="err-forgotUser">Please enter your username</span>
+        </div>
+
+        <button class="auth-btn" onclick="doForgot()">Find Account →</button>
+
+        <div class="auth-switch" style="margin-top:16px">
+          <a onclick="showPanel('panelLogin')">← Back to Sign In</a>
+        </div>
       </div>
 
-      <button class="auth-btn" onclick="doSignup()">
-        Create Account →
+    </div>
+  </div>
+
+
+  <!-- ── TOPBAR ── -->
+  <nav class="topbar">
+    <div class="brand">
+      <div class="brand-icon">
+        <svg viewBox="0 0 24 24">
+          <defs>
+            <linearGradient id="klyraNavGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#818cf8" />
+              <stop offset="100%" stop-color="#c084fc" />
+            </linearGradient>
+          </defs>
+          <polygon points="12,2 21,8 18,20 6,20 3,8" fill="url(#klyraNavGrad)" stroke="none" />
+          <polygon points="12,5 18,9.5 16,17.5 8,17.5 6,9.5" fill="#fff" opacity=".2" stroke="none" />
+          <path d="M12,8 L15,12 L12,20 L9,12 Z" fill="#fff" opacity=".35" stroke="none" />
+        </svg>
+      </div>
+      Klyra
+    </div>
+    <div class="nav-tabs">
+      <button class="nav-tab active" onclick="showPage('form')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+          <polyline points="10 9 9 9 8 9" />
+        </svg>
+        Evaluate
       </button>
+      <button class="nav-tab" onclick="showPage('dashboard')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1" />
+          <rect x="14" y="3" width="7" height="7" rx="1" />
+          <rect x="3" y="14" width="7" height="7" rx="1" />
+          <rect x="14" y="14" width="7" height="7" rx="1" />
+        </svg>
+        Dashboard
+      </button>
+      <button class="nav-tab" onclick="showPage('analytics')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10" />
+          <line x1="12" y1="20" x2="12" y2="4" />
+          <line x1="6" y1="20" x2="6" y2="14" />
+        </svg>
+        Analytics
+      </button>
+    </div>
+    <div class="topbar-right" style="display:flex;align-items:center;gap:12px">
+      <span class="total-badge" id="totalBadge">0 students</span>
+      <div class="user-menu">
+        <div class="user-avatar" id="userAvatar">?</div>
+        <div class="user-dropdown">
+          <div class="user-dropdown-header">
+            <div class="ud-name" id="udName">—</div>
+            <div class="ud-email" id="udEmail">—</div>
+          </div>
+          <a onclick="showPage('dashboard')" style="cursor:pointer">👤 My Profile</a>
+          <a class="ud-logout" onclick="doLogout()">🚪 Sign Out</a>
+        </div>
+      </div>
+    </div>
+  </nav>
 
-      <div class="auth-switch">
-        Already have an account? <a onclick="showPanel('panelLogin')">Sign in →</a>
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!--  PAGE: FORM                                               -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="page active" id="page-form">
+
+    <div class="hero">
+      <div class="hero-content">
+        <div class="hero-tag">🎓 Academic Evaluation System</div>
+        <h1>Student Performance<br><em>Prediction & Management</em></h1>
+        <p>Fill in student details across all categories to get an instant performance score, eligibility status, and
+          level classification.</p>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="num" id="heroTotal">0</div>
+            <div class="lbl">Evaluated</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num" id="heroAdvanced">0</div>
+            <div class="lbl">Advanced</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num" id="heroEligible">0</div>
+            <div class="lbl">Eligible</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- FORGOT PASSWORD PANEL -->
-    <div class="auth-form-panel" id="panelForgot">
-      <div style="font-size:2rem;margin-bottom:8px">🔑</div>
-      <div class="auth-title">Reset Password</div>
-      <div class="auth-desc">Enter your username and we'll show you a reset option</div>
-
-      <div id="forgotAlert" class="auth-alert"></div>
-
-      <div class="auth-field">
-        <label>Username</label>
-        <div class="auth-field-wrap">
-          <span class="field-icon">👤</span>
-          <input type="text" id="forgotUser" placeholder="Enter your username">
-        </div>
-        <span class="auth-err-msg" id="err-forgotUser">Please enter your username</span>
-      </div>
-
-      <button class="auth-btn" onclick="doForgot()">Find Account →</button>
-
-      <div class="auth-switch" style="margin-top:16px">
-        <a onclick="showPanel('panelLogin')">← Back to Sign In</a>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-
-<!-- ── TOPBAR ── -->
-<nav class="topbar">
-  <div class="brand">
-    <div class="brand-icon">
-      <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-    </div>
-    Mubeen
-  </div>
-  <div class="nav-tabs">
-    <button class="nav-tab active" onclick="showPage('form')">📝 Evaluate</button>
-    <button class="nav-tab" onclick="showPage('dashboard')">📊 Dashboard</button>
-    <button class="nav-tab" onclick="showPage('analytics')">📈 Analytics</button>
-  </div>
-  <div class="topbar-right" style="display:flex;align-items:center;gap:12px">
-    <span class="total-badge" id="totalBadge">0 students</span>
-    <div class="user-menu">
-      <div class="user-avatar" id="userAvatar">?</div>
-      <div class="user-dropdown">
-        <div class="user-dropdown-header">
-          <div class="ud-name" id="udName">—</div>
-          <div class="ud-email" id="udEmail">—</div>
-        </div>
-        <a onclick="showPanel('panelLogin');document.getElementById('authScreen').style.display='flex'">👤 My Profile</a>
-        <a class="ud-logout" onclick="doLogout()">🚪 Sign Out</a>
-      </div>
-    </div>
-  </div>
-</nav>
-
-<!-- ══════════════════════════════════════════════════════════ -->
-<!--  PAGE: FORM                                               -->
-<!-- ══════════════════════════════════════════════════════════ -->
-<div class="page active" id="page-form">
-
-  <div class="hero">
-    <div class="hero-content">
-      <div class="hero-tag">🎓 Academic Evaluation System</div>
-      <h1>Student Performance<br><em>Prediction & Management</em></h1>
-      <p>Fill in student details across all categories to get an instant performance score, eligibility status, and level classification.</p>
-      <div class="hero-stats">
-        <div class="hero-stat"><div class="num" id="heroTotal">0</div><div class="lbl">Evaluated</div></div>
-        <div class="hero-stat"><div class="num" id="heroAdvanced">0</div><div class="lbl">Advanced</div></div>
-        <div class="hero-stat"><div class="num" id="heroEligible">0</div><div class="lbl">Eligible</div></div>
-      </div>
-    </div>
-  </div>
-
-  <div class="layout">
-    <!-- FORM -->
-    <div>
-      <div class="form-card">
-        <div class="form-header">
-          <div class="step-pills">
-            <div class="step-pill active" id="pill-1"><div class="dot"></div> Basic Info</div>
-            <div class="step-pill" id="pill-2"><div class="dot"></div> Academic</div>
-            <div class="step-pill" id="pill-3"><div class="dot"></div> Activities</div>
-            <div class="step-pill" id="pill-4"><div class="dot"></div> Review</div>
-          </div>
-        </div>
-        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:25%"></div></div>
-
-        <!-- STEP 1: BASIC INFO -->
-        <div class="form-section active" id="sec-1">
-          <div class="sec-label">Step 1 — Basic Information</div>
-
-          <div class="grid-2">
-            <div class="field">
-              <label>Full Name <span class="tip">required</span></label>
-              <input type="text" id="name" placeholder="e.g. Arjun Kumar" oninput="liveUpdate()">
-              <span class="field-error" id="err-name"></span>
-            </div>
-            <div class="field">
-              <label>Register Number <span class="tip">required</span></label>
-              <input type="text" id="register_no" placeholder="e.g. 21CS001" oninput="liveUpdate()">
-              <span class="field-error" id="err-reg"></span>
-            </div>
-          </div>
-
-          <div class="grid-2">
-            <div class="field">
-              <label>Department</label>
-              <select id="dept" onchange="updateAcadYear();updateSemesterOptions()">
-                <option value="">Select department</option>
-                <optgroup label="── Arts &amp; Science ──">
-                  <option>B.Sc Computer Science</option>
-                  <option>B.Sc Information Technology</option>
-                  <option>B.Sc Mathematics</option>
-                  <option>B.Sc Physics</option>
-                  <option>B.Sc Chemistry</option>
-                  <option>B.Sc Microbiology</option>
-                  <option>B.Sc Biotechnology</option>
-                  <option>B.Sc Zoology</option>
-                  <option>B.Sc Botany</option>
-                  <option>B.Com (General)</option>
-                  <option>B.Com (Computer Applications)</option>
-                  <option>BBA (Business Administration)</option>
-                  <option>BA English Literature</option>
-                  <option>BA Tamil</option>
-                  <option>BA History</option>
-                  <option>BA Economics</option>
-                  <option>BA Sociology</option>
-                  <option>BSW (Social Work)</option>
-                </optgroup>
-                <optgroup label="── Engineering ──">
-                  <option>B.E / B.Tech Computer Science &amp; Engineering</option>
-                  <option>B.E / B.Tech Information Technology</option>
-                  <option>B.E / B.Tech Electronics &amp; Communication</option>
-                  <option>B.E / B.Tech Electrical &amp; Electronics</option>
-                  <option>B.E / B.Tech Mechanical Engineering</option>
-                  <option>B.E / B.Tech Civil Engineering</option>
-                  <option>B.E / B.Tech Aeronautical Engineering</option>
-                  <option>B.E / B.Tech Biomedical Engineering</option>
-                  <option>B.E / B.Tech Automobile Engineering</option>
-                  <option>B.E / B.Tech Chemical Engineering</option>
-                  <option>B.E / B.Tech Marine Engineering</option>
-                  <option>B.Tech Artificial Intelligence &amp; Data Science</option>
-                  <option>B.Tech Cyber Security</option>
-                  <option>B.Tech Robotics &amp; Automation</option>
-                </optgroup>
-              </select>
-            </div>
-            <div class="field">
-              <label>Semester</label>
-              <select id="semester">
-                <option value="">Select semester</option>
-                <optgroup label="── Year 1 ──">
-                  <option>1st Semester</option>
-                  <option>2nd Semester</option>
-                </optgroup>
-                <optgroup label="── Year 2 ──">
-                  <option>3rd Semester</option>
-                  <option>4th Semester</option>
-                </optgroup>
-                <optgroup label="── Year 3 ──">
-                  <option>5th Semester</option>
-                  <option>6th Semester</option>
-                </optgroup>
-                <optgroup label="── Year 4 (Engg only) ──">
-                  <option>7th Semester</option>
-                  <option>8th Semester</option>
-                </optgroup>
-              </select>
-            </div>
-          </div>
-
-          <div class="grid-2">
-            <div class="field">
-              <label>Academic Year</label>
-              <select id="acad_year">
-                <option value="">— Select department first —</option>
-              </select>
-            </div>
-            <div class="field">
-              <label>Gender</label>
-              <select id="gender">
-                <option value="">Prefer not to say</option>
-                <option>Male</option>
-                <option>Female</option>
-                <option>Other</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <!-- STEP 2: ACADEMIC -->
-        <div class="form-section" id="sec-2">
-          <div class="sec-label">Step 2 — Academic Performance</div>
-
-          <div class="slider-field">
-            <div class="slider-header">
-              <label>📅 Attendance Percentage</label>
-              <div class="slider-value-box" id="att-val">75%</div>
-            </div>
-            <div class="slider-track">
-              <input type="range" id="attendance" min="0" max="100" value="75" oninput="updateSlider('attendance','att-val',this.value,'%');liveUpdate()">
-            </div>
-            <div class="slider-labels"><span>0%</span><span>50%</span><span>100%</span></div>
-          </div>
-
-          <div class="slider-field">
-            <div class="slider-header">
-              <label>📚 Daily Study Hours</label>
-              <div class="slider-value-box" id="hrs-val">4 hrs</div>
-            </div>
-            <div class="slider-track">
-              <input type="range" id="hour_study" min="0" max="16" value="4" oninput="updateSlider('hour_study','hrs-val',this.value,' hrs');liveUpdate()">
-            </div>
-            <div class="slider-labels"><span>0</span><span>8</span><span>16</span></div>
-          </div>
-
-          <div class="grid-2">
-            <div class="field">
-              <label>📝 Internal Marks <span class="tip">out of 100</span></label>
-              <input type="number" id="internal" placeholder="e.g. 78" min="0" max="100" oninput="liveUpdate()">
-            </div>
-            <div class="field">
-              <label>❗ Number of Arrears</label>
-              <input type="number" id="arrears" placeholder="e.g. 0" min="0" value="0" oninput="liveUpdate()">
-            </div>
-          </div>
-
-          <div class="field" style="margin-bottom:16px;">
-            <label>🏫 Class Rank / Position <span class="tip">optional</span></label>
-            <input type="number" id="class_rank" placeholder="e.g. 5 (out of class)" min="1" oninput="liveUpdate()">
-          </div>
-        </div>
-
-        <!-- STEP 3: ACTIVITIES -->
-        <div class="form-section" id="sec-3">
-          <div class="sec-label">Step 3 — Projects & Activities</div>
-
-          <div class="grid-2" style="margin-bottom:8px">
-            <div class="field">
-              <label>💼 Projects Completed</label>
-              <div class="counter-field">
-                <button class="counter-btn" onclick="adjustCounter('projects',-1)">−</button>
-                <input type="number" class="counter-input" id="projects" value="0" min="0" oninput="liveUpdate()">
-                <button class="counter-btn" onclick="adjustCounter('projects',1)">+</button>
+    <div class="layout">
+      <!-- FORM -->
+      <div>
+        <div class="form-card">
+          <div class="form-header">
+            <div class="step-pills">
+              <div class="step-pill active" id="pill-1">
+                <div class="dot"></div> Basic Info
               </div>
-            </div>
-            <div class="field">
-              <label>🏢 Internships Done</label>
-              <div class="counter-field">
-                <button class="counter-btn" onclick="adjustCounter('internships',-1)">−</button>
-                <input type="number" class="counter-input" id="internships" value="0" min="0" oninput="liveUpdate()">
-                <button class="counter-btn" onclick="adjustCounter('internships',1)">+</button>
+              <div class="step-pill" id="pill-2">
+                <div class="dot"></div> Academic
+              </div>
+              <div class="step-pill" id="pill-3">
+                <div class="dot"></div> Activities
+              </div>
+              <div class="step-pill" id="pill-4">
+                <div class="dot"></div> Review
               </div>
             </div>
           </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width:25%"></div>
+          </div>
 
-          <div style="margin-bottom:18px">
-            <label style="font-size:.78rem;font-weight:600;display:block;margin-bottom:10px">🏃 Sports Participation</label>
-            <div class="chip-row" id="chips-sports">
-              <label class="chip-option selected" onclick="selectChip('chips-sports',this,'sports',1)">
-                <input type="radio" name="sports" value="1">
-                <span class="chip-icon">⚽</span> Active Participant
-              </label>
-              <label class="chip-option" onclick="selectChip('chips-sports',this,'sports',0)">
-                <input type="radio" name="sports" value="0">
-                <span class="chip-icon">😶</span> Not Participating
-              </label>
+          <!-- STEP 1: BASIC INFO -->
+          <div class="form-section active" id="sec-1">
+            <div class="sec-label">Step 1 — Basic Information</div>
+
+            <div class="grid-2">
+              <div class="field">
+                <label>Full Name <span class="tip">required</span></label>
+                <input type="text" id="name" placeholder="e.g. Arjun Kumar" oninput="liveUpdate()">
+                <span class="field-error" id="err-name"></span>
+              </div>
+              <div class="field">
+                <label>Register Number <span class="tip">required</span></label>
+                <input type="text" id="register_no" placeholder="e.g. 21CS001" oninput="liveUpdate()">
+                <span class="field-error" id="err-reg"></span>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="field">
+                <label>Department</label>
+                <select id="dept" onchange="updateAcadYear();updateSemesterOptions()">
+                  <option value="">Select department</option>
+                  <optgroup label="── B.A. Programs ──">
+                    <option>B.A. Arabic</option>
+                    <option>B.A. English</option>
+                    <option>B.A. Economics</option>
+                    <option>B.A. History</option>
+                    <option>B.A. Sociology</option>
+                    <option>B.A. Tamil</option>
+                    <option>B.A. Urdu</option>
+                    <option>B.A. Business Economics</option>
+                    <option>B.A. Defence and Strategic Studies</option>
+                    <option>B.A. Criminology and Police Administration</option>
+                  </optgroup>
+                  <optgroup label="── B.Com. Programs ──">
+                    <option>B.Com. General</option>
+                    <option>B.Com. Corporate Secretaryship</option>
+                    <option>B.Com. Accounting and Finance</option>
+                    <option>B.Com. Bank Management</option>
+                    <option>B.Com. Professional Accounting</option>
+                    <option>B.Com. Information and Systems Management</option>
+                  </optgroup>
+                  <optgroup label="── BBA ──">
+                    <option>Bachelor of Business Administration</option>
+                  </optgroup>
+                  <optgroup label="── B.Sc. Programs ──">
+                    <option>B.Sc. Chemistry</option>
+                    <option>B.Sc. Physics</option>
+                    <option>B.Sc. Mathematics</option>
+                    <option>B.Sc. Advanced Zoology and Biotechnology</option>
+                    <option>B.Sc. Plant Biology and Plant Biotechnology</option>
+                    <option>B.Sc. Computer Science</option>
+                    <option>B.Sc. Computer Science with Artificial Intelligence</option>
+                    <option>B.Sc. Computer Science with Data Science</option>
+                    <option>B.Sc. Information Technology</option>
+                    <option>B.Sc. Biotechnology</option>
+                    <option>B.Sc. Electronic Media</option>
+                  </optgroup>
+                  <optgroup label="── BCA ──">
+                    <option>Bachelor of Computer Application</option>
+                  </optgroup>
+                  <optgroup label="── 🔧 Core Engineering ──">
+                    <option>B.Tech Computer Science and Engineering (CSE)</option>
+                    <option>B.Tech Information Technology (IT)</option>
+                    <option>B.Tech Mechanical Engineering (ME)</option>
+                    <option>B.Tech Civil Engineering (CE)</option>
+                    <option>B.Tech Electrical and Electronics Engineering (EEE)</option>
+                    <option>B.Tech Electronics and Communication Engineering (ECE)</option>
+                  </optgroup>
+                  <optgroup label="── 💻 Computer &amp; Tech ──">
+                    <option>B.Tech Artificial Intelligence (AI)</option>
+                    <option>B.Tech Artificial Intelligence and Data Science (AI &amp; DS)</option>
+                    <option>B.Tech Data Science (DS)</option>
+                    <option>B.Tech Cyber Security</option>
+                    <option>B.Tech Internet of Things (IoT)</option>
+                    <option>B.Tech Software Engineering</option>
+                    <option>B.Tech Computer Engineering</option>
+                  </optgroup>
+                  <optgroup label="── ⚙️ Specialized Engineering ──">
+                    <option>B.Tech Automobile Engineering</option>
+                    <option>B.Tech Aeronautical Engineering</option>
+                    <option>B.Tech Aerospace Engineering</option>
+                    <option>B.Tech Mechatronics Engineering</option>
+                    <option>B.Tech Robotics Engineering</option>
+                    <option>B.Tech Marine Engineering</option>
+                    <option>B.Tech Mining Engineering</option>
+                    <option>B.Tech Petroleum Engineering</option>
+                  </optgroup>
+                  <optgroup label="── 🔬 Science &amp; Industrial ──">
+                    <option>B.Tech Chemical Engineering</option>
+                    <option>B.Tech Biotechnology Engineering</option>
+                    <option>B.Tech Biomedical Engineering</option>
+                    <option>B.Tech Environmental Engineering</option>
+                    <option>B.Tech Agricultural Engineering</option>
+                    <option>B.Tech Food Technology</option>
+                  </optgroup>
+                  <optgroup label="── 🏗️ Design &amp; Infrastructure ──">
+                    <option>B.Arch Architecture</option>
+                    <option>B.Tech Construction Engineering</option>
+                    <option>B.Tech Structural Engineering</option>
+                  </optgroup>
+                  <optgroup label="── 🔌 Emerging Fields ──">
+                    <option>B.Tech Renewable Energy Engineering</option>
+                    <option>B.Tech Nanotechnology</option>
+                    <option>B.Tech Industrial Engineering</option>
+                    <option>B.Tech Production Engineering</option>
+                  </optgroup>
+
+
+                </select>
+              </div>
+              <div class="field">
+                <label>Semester</label>
+                <select id="semester">
+                  <option value="">Select semester</option>
+                  <optgroup label="── Year 1 ──">
+                    <option>1st Semester</option>
+                    <option>2nd Semester</option>
+                  </optgroup>
+                  <optgroup label="── Year 2 ──">
+                    <option>3rd Semester</option>
+                    <option>4th Semester</option>
+                  </optgroup>
+                  <optgroup label="── Year 3 ──">
+                    <option>5th Semester</option>
+                    <option>6th Semester</option>
+                  </optgroup>
+                  <optgroup label="── Year 4 (Engg only) ──">
+                    <option>7th Semester</option>
+                    <option>8th Semester</option>
+                  </optgroup>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div class="field">
+                <label>Academic Year</label>
+                <select id="acad_year">
+                  <option value="">— Select department first —</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Gender</label>
+                <select id="gender">
+                  <option value="">Select gender</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                  <option>Other</option>
+                </select>
+              </div>
             </div>
           </div>
 
-          <div style="margin-bottom:18px">
-            <label style="font-size:.78rem;font-weight:600;display:block;margin-bottom:10px">🌐 Outer College Programs</label>
-            <div class="chip-row" id="chips-outer">
-              <label class="chip-option selected" onclick="selectChip('chips-outer',this,'outer_programs',2)">
-                <input type="radio" name="outer_programs" value="2">
-                <span class="chip-icon">🏆</span> Won Awards
-              </label>
-              <label class="chip-option" onclick="selectChip('chips-outer',this,'outer_programs',1)">
-                <input type="radio" name="outer_programs" value="1">
-                <span class="chip-icon">🎯</span> Participated
-              </label>
-              <label class="chip-option" onclick="selectChip('chips-outer',this,'outer_programs',0)">
-                <input type="radio" name="outer_programs" value="0">
-                <span class="chip-icon">😶</span> None
-              </label>
+          <!-- STEP 2: ACADEMIC -->
+          <div class="form-section" id="sec-2">
+            <div class="sec-label">Step 2 — Academic Performance</div>
+
+            <div class="slider-field">
+              <div class="slider-header">
+                <label>📅 Attendance Percentage</label>
+                <div class="slider-value-box" id="att-val">0%</div>
+              </div>
+              <div class="slider-track">
+                <input type="range" id="attendance" min="0" max="100" value="0"
+                  oninput="updateSlider('attendance','att-val',this.value,'%');liveUpdate()">
+              </div>
+              <div class="slider-labels"><span>0%</span><span>50%</span><span>100%</span></div>
+            </div>
+
+            <div class="slider-field">
+              <div class="slider-header">
+                <label>📚 Daily Study Hours</label>
+                <div class="slider-value-box" id="hrs-val">0 hrs</div>
+              </div>
+              <div class="slider-track">
+                <input type="range" id="hour_study" min="0" max="16" value="0"
+                  oninput="updateSlider('hour_study','hrs-val',this.value,' hrs');liveUpdate()">
+              </div>
+              <div class="slider-labels"><span>0</span><span>8</span><span>16</span></div>
+            </div>
+
+            <div class="grid-2">
+              <div class="field">
+                <label>📝 Internal Marks <span class="tip">out of 100</span></label>
+                <input type="number" id="internal" placeholder="e.g. 78" min="0" max="100" oninput="liveUpdate()">
+              </div>
+              <div class="field">
+                <label>❗ Number of Arrears</label>
+                <input type="number" id="arrears" placeholder="e.g. 0" min="0" value="0" oninput="liveUpdate()">
+              </div>
             </div>
           </div>
 
-          <div style="margin-bottom:18px">
-            <label style="font-size:.78rem;font-weight:600;display:block;margin-bottom:10px">📜 Certifications & Online Courses</label>
-            <div class="counter-field" style="max-width:200px">
-              <button class="counter-btn" onclick="adjustCounter('certs',-1)">−</button>
-              <input type="number" class="counter-input" id="certs" value="0" min="0" oninput="liveUpdate()">
-              <button class="counter-btn" onclick="adjustCounter('certs',1)">+</button>
+          <!-- STEP 3: ACTIVITIES -->
+          <div class="form-section" id="sec-3">
+            <div class="sec-label">Step 3 — Projects & Activities</div>
+
+            <div class="grid-2" style="margin-bottom:8px">
+              <div class="field">
+                <label>💼 Projects Completed</label>
+                <div class="counter-field">
+                  <button class="counter-btn" onclick="adjustCounter('projects',-1)">−</button>
+                  <input type="number" class="counter-input" id="projects" value="0" min="0" oninput="liveUpdate()">
+                  <button class="counter-btn" onclick="adjustCounter('projects',1)">+</button>
+                </div>
+              </div>
+              <div class="field">
+                <label>🏢 Internships Done</label>
+                <div class="counter-field">
+                  <button class="counter-btn" onclick="adjustCounter('internships',-1)">−</button>
+                  <input type="number" class="counter-input" id="internships" value="0" min="0" oninput="liveUpdate()">
+                  <button class="counter-btn" onclick="adjustCounter('internships',1)">+</button>
+                </div>
+              </div>
             </div>
-          </div>
 
-          <div>
-            <label style="font-size:.78rem;font-weight:600;display:block;margin-bottom:10px">🎤 Leadership Roles</label>
-            <div class="chip-row" id="chips-leader">
-              <label class="chip-option" onclick="selectChip('chips-leader',this,'leader',2)">
-                <input type="radio" name="leader" value="2">
-                <span class="chip-icon">👑</span> President / Head
-              </label>
-              <label class="chip-option" onclick="selectChip('chips-leader',this,'leader',1)">
-                <input type="radio" name="leader" value="1">
-                <span class="chip-icon">🤝</span> Member
-              </label>
-              <label class="chip-option selected" onclick="selectChip('chips-leader',this,'leader',0)">
-                <input type="radio" name="leader" value="0">
-                <span class="chip-icon">😶</span> None
-              </label>
+            <div style="margin-bottom:18px">
+              <label style="font-size:.78rem;font-weight:600;display:block;margin-bottom:10px">🏃 Sports
+                Participation</label>
+              <div class="chip-row" id="chips-sports">
+                <label class="chip-option" onclick="selectChip('chips-sports',this,'sports',1)">
+                  <input type="radio" name="sports" value="1">
+                  <span class="chip-icon">⚽</span> Active Participant
+                </label>
+                <label class="chip-option selected" onclick="selectChip('chips-sports',this,'sports',0)">
+                  <input type="radio" name="sports" value="0">
+                  <span class="chip-icon">😶</span> Not Participating
+                </label>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <!-- STEP 4: REVIEW -->
-        <div class="form-section" id="sec-4">
-          <div class="sec-label">Step 4 — Review & Submit</div>
-
-          <div id="reviewContent" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px"></div>
-
-          <div style="background:rgba(37,99,235,.05);border:1px solid rgba(37,99,235,.15);border-radius:12px;padding:14px 16px;margin-bottom:4px;">
-            <div style="font-size:.78rem;color:var(--accent);font-weight:600;margin-bottom:6px;">ℹ️ How is the score calculated?</div>
-            <div style="font-size:.78rem;color:var(--muted);line-height:1.7;">
-              Score (0–100) = weighted sum of: Attendance (max 25) + Study Hours (max 10) + Internal Marks (max 25) + Projects (max 15) + Internships (max 10) + Activities (max 10) + Certifications (max 5). Arrears or score &lt;30 = Not Eligible.
+            <div style="margin-bottom:18px">
+              <label style="font-size:.78rem;font-weight:600;display:block;margin-bottom:10px">🌐 Outer College
+                Programs</label>
+              <div class="chip-row" id="chips-outer">
+                <label class="chip-option" onclick="selectChip('chips-outer',this,'outer_programs',2)">
+                  <input type="radio" name="outer_programs" value="2">
+                  <span class="chip-icon">🏆</span> Won Awards
+                </label>
+                <label class="chip-option" onclick="selectChip('chips-outer',this,'outer_programs',1)">
+                  <input type="radio" name="outer_programs" value="1">
+                  <span class="chip-icon">🎯</span> Participated
+                </label>
+                <label class="chip-option selected" onclick="selectChip('chips-outer',this,'outer_programs',0)">
+                  <input type="radio" name="outer_programs" value="0">
+                  <span class="chip-icon">😶</span> None
+                </label>
+              </div>
             </div>
-          </div>
-        </div>
 
-        <div class="form-footer">
-          <span class="step-count" id="stepCount">Step 1 of 4</span>
-          <div class="btn-row">
-            <button class="btn btn-ghost" id="prevBtn" onclick="goStep(-1)" style="visibility:hidden">← Back</button>
-            <button class="btn btn-primary" id="nextBtn" onclick="goStep(1)">Continue →</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-      <div class="s-card">
-        <div class="s-card-header">
-          Live Score Preview
-          <span style="font-size:.72rem;color:var(--muted);font-weight:400">Updates as you type</span>
-        </div>
-        <div class="score-section">
-          <div class="ring-wrap">
-            <svg width="130" height="130" viewBox="0 0 130 130">
-              <circle class="ring-bg" cx="65" cy="65" r="54"/>
-              <circle class="ring-fg" id="ringFg" cx="65" cy="65" r="54" stroke="#2563eb"/>
-            </svg>
-            <div class="ring-center">
-              <div class="ring-num" id="ringNum">0</div>
-              <div class="ring-lbl">/ 100</div>
+            <div style="margin-bottom:18px">
+              <label style="font-size:.78rem;font-weight:600;display:block;margin-bottom:10px">📜 Certifications &
+                Online Courses</label>
+              <div class="counter-field">
+                <button class="counter-btn" onclick="adjustCounter('certs',-1)">−</button>
+                <input type="number" class="counter-input" id="certs" value="0" min="0" oninput="liveUpdate()">
+                <button class="counter-btn" onclick="adjustCounter('certs',1)">+</button>
+              </div>
             </div>
-          </div>
-          <div class="level-pill level-pending" id="levelPill">— Not Evaluated</div>
-        </div>
-        <div class="score-meter">
-          <div class="meter-row">
-            <span class="m-label">Attendance</span>
-            <div class="meter-bar"><div class="meter-fill" id="m-att" style="width:75%"></div></div>
-            <span class="meter-val" id="mv-att">75</span>
-          </div>
-          <div class="meter-row">
-            <span class="m-label">Study Hours</span>
-            <div class="meter-bar"><div class="meter-fill" id="m-hrs" style="width:25%"></div></div>
-            <span class="meter-val" id="mv-hrs">4</span>
-          </div>
-          <div class="meter-row">
-            <span class="m-label">Internal</span>
-            <div class="meter-bar"><div class="meter-fill" id="m-int" style="width:0%"></div></div>
-            <span class="meter-val" id="mv-int">—</span>
-          </div>
-          <div class="meter-row">
-            <span class="m-label">Projects</span>
-            <div class="meter-bar"><div class="meter-fill" id="m-proj" style="width:0%"></div></div>
-            <span class="meter-val" id="mv-proj">0</span>
-          </div>
-          <div class="meter-row">
-            <span class="m-label">Internships</span>
-            <div class="meter-bar"><div class="meter-fill" id="m-intern" style="width:0%"></div></div>
-            <span class="meter-val" id="mv-intern">0</span>
-          </div>
-        </div>
-        <div class="eligibility-box elig-ok" id="eligBox">
-          <span>✅</span> Currently Eligible
-        </div>
-        <div style="padding:0 20px 16px">
-          <div style="font-size:.68rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">Score Thresholds</div>
-          <div style="position:relative;height:10px;border-radius:5px;overflow:hidden;background:linear-gradient(90deg,#ef4444 0%,#ef4444 30%,#f59e0b 30%,#f59e0b 50%,#3b82f6 50%,#3b82f6 60%,#8b5cf6 60%,#8b5cf6 80%,#10b981 80%,#10b981 100%)"></div>
-          <div style="display:flex;justify-content:space-between;margin-top:4px">
-            <span style="font-size:.6rem;color:var(--muted)">0</span>
-            <span style="font-size:.6rem;color:var(--muted)">30</span>
-            <span style="font-size:.6rem;color:var(--muted)">50</span>
-            <span style="font-size:.6rem;color:var(--muted)">60</span>
-            <span style="font-size:.6rem;color:var(--muted)">80</span>
-            <span style="font-size:.6rem;color:var(--muted)">100</span>
-          </div>
-          <div id="scoreThresholdMarker" style="margin-top:6px;font-size:.75rem;font-weight:700;color:var(--accent);text-align:center"></div>
-        </div>
-      </div>
 
-      <div class="s-card">
-        <div class="s-card-header">Input Summary</div>
-        <div class="summary-list">
-          <div class="s-item"><span class="s-key">Name</span><span class="s-val" id="s-name">—</span></div>
-          <div class="s-item"><span class="s-key">Register No</span><span class="s-val" id="s-reg">—</span></div>
-          <div class="s-item"><span class="s-key">Attendance</span><span class="s-val" id="s-att">75%</span></div>
-          <div class="s-item"><span class="s-key">Study Hours</span><span class="s-val" id="s-hrs">4 hrs</span></div>
-          <div class="s-item"><span class="s-key">Internal</span><span class="s-val" id="s-int">—</span></div>
-          <div class="s-item"><span class="s-key">Projects</span><span class="s-val" id="s-proj">0</span></div>
-          <div class="s-item"><span class="s-key">Internships</span><span class="s-val" id="s-intern">0</span></div>
-          <div class="s-item"><span class="s-key">Arrears</span><span class="s-val" id="s-arr" style="color:var(--danger)">0</span></div>
-        </div>
-      </div>
-
-      <div class="s-card" style="background:linear-gradient(135deg,var(--primary),#1e40af)">
-        <div style="padding:20px;color:#fff">
-          <div style="font-size:.75rem;opacity:.6;margin-bottom:8px;font-weight:600;letter-spacing:.06em;text-transform:uppercase">Scoring Guide (out of 100)</div>
-          <div style="display:flex;flex-direction:column;gap:6px">
-            <div style="display:flex;justify-content:space-between;font-size:.78rem;opacity:.8"><span>🟢 Advanced</span><span style="font-weight:700">80 – 100</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:.78rem;opacity:.8"><span>🟣 Adv. Intermediate</span><span style="font-weight:700">60 – 79</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:.78rem;opacity:.8"><span>🔵 Intermediate</span><span style="font-weight:700">50 – 59</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:.78rem;opacity:.8"><span>🟡 Basic</span><span style="font-weight:700">30 – 49</span></div>
-            <div style="display:flex;justify-content:space-between;font-size:.78rem;opacity:.8"><span>🔴 Not Eligible</span><span style="font-weight:700">&lt; 30 or Arrears</span></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-<!-- ══════════════════════════════════════════════════════════ -->
-<!--  PAGE: DASHBOARD                                          -->
-<!-- ══════════════════════════════════════════════════════════ -->
-<div class="page" id="page-dashboard">
-
-  <!-- PERSONALIZED HERO BANNER -->
-  <div class="pdash-hero">
-    <div class="pdash-hero-left">
-      <div class="pdash-greeting" id="pdashGreeting">Good morning</div>
-      <h2 class="pdash-name" id="pdashName">Dashboard</h2>
-      <p class="pdash-subtitle" id="pdashSubtitle">Here's your performance overview</p>
-      <div class="pdash-hero-chips">
-        <div class="phero-chip" id="pheroDate"></div>
-        <div class="phero-chip" id="pheroMember"></div>
-      </div>
-    </div>
-    <div class="pdash-hero-right">
-      <div class="pdash-avatar-ring" id="pdashAvatarRing">
-        <div class="pdash-avatar" id="pdashAvatar">?</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PERSONAL PROFILE CARD -->
-  <div class="pdash-wrap">
-
-    <!-- TOP: QUICK STATS ROW -->
-    <div class="pstat-row">
-      <div class="pstat-card" style="--accent-c:#2563eb">
-        <div class="pstat-icon" style="background:rgba(37,99,235,.1)">📋</div>
-        <div class="pstat-num" id="pk-total">0</div>
-        <div class="pstat-lbl">Total Students</div>
-        <div class="pstat-trend" id="pk-total-trend"></div>
-      </div>
-      <div class="pstat-card" style="--accent-c:#10b981">
-        <div class="pstat-icon" style="background:rgba(16,185,129,.1)">🏆</div>
-        <div class="pstat-num" id="pk-adv">0</div>
-        <div class="pstat-lbl">Advanced+</div>
-        <div class="pstat-trend" id="pk-adv-rate"></div>
-      </div>
-      <div class="pstat-card" style="--accent-c:#f59e0b">
-        <div class="pstat-icon" style="background:rgba(245,158,11,.1)">📈</div>
-        <div class="pstat-num" id="pk-avg">—</div>
-        <div class="pstat-lbl">Avg Score /100</div>
-        <div class="pstat-trend" id="pk-avg-bar"></div>
-      </div>
-      <div class="pstat-card" style="--accent-c:#8b5cf6">
-        <div class="pstat-icon" style="background:rgba(139,92,246,.1)">🎯</div>
-        <div class="pstat-num" id="pk-top">—</div>
-        <div class="pstat-lbl">Top Score</div>
-        <div class="pstat-trend" id="pk-top-name"></div>
-      </div>
-      <div class="pstat-card" style="--accent-c:#06b6d4">
-        <div class="pstat-icon" style="background:rgba(6,182,212,.1)">📅</div>
-        <div class="pstat-num" id="pk-att">—</div>
-        <div class="pstat-lbl">Avg Attendance</div>
-        <div class="pstat-trend" id="pk-att-bar"></div>
-      </div>
-      <div class="pstat-card" style="--accent-c:#ef4444">
-        <div class="pstat-icon" style="background:rgba(239,68,68,.1)">❌</div>
-        <div class="pstat-num" id="pk-inelig">0</div>
-        <div class="pstat-lbl">Not Eligible</div>
-        <div class="pstat-trend" id="pk-inelig-rate"></div>
-      </div>
-    </div>
-
-    <!-- MIDDLE: TWO COLUMN LAYOUT -->
-    <div class="pmid-grid">
-
-      <!-- LEFT COLUMN -->
-      <div class="pmid-left">
-
-        <!-- ACTIVITY TIMELINE -->
-        <div class="pcard">
-          <div class="pcard-header">
-            <span class="pcard-title">📌 Recent Activity</span>
-            <span class="pcard-action" onclick="showPage('form')">+ Add New</span>
-          </div>
-          <div id="activityTimeline" class="activity-timeline"></div>
-        </div>
-
-        <!-- PERFORMANCE BREAKDOWN -->
-        <div class="pcard">
-          <div class="pcard-header">
-            <span class="pcard-title">🧩 Class Performance Breakdown</span>
-            <span id="breakdownCount" style="font-size:.73rem;color:var(--muted)"></span>
-          </div>
-          <div class="breakdown-levels" id="breakdownLevels"></div>
-        </div>
-
-        <!-- SUBJECT AVERAGES -->
-        <div class="pcard">
-          <div class="pcard-header">
-            <span class="pcard-title">📊 Component Averages</span>
-            <span style="font-size:.72rem;color:var(--muted)">Across all students</span>
-          </div>
-          <div id="componentAvgs" class="component-avgs"></div>
-        </div>
-
-      </div>
-
-      <!-- RIGHT COLUMN -->
-      <div class="pmid-right">
-
-        <!-- PROFILE CARD -->
-        <div class="pcard profile-card">
-          <div class="profile-card-top">
-            <div class="profile-big-avatar" id="profileBigAvatar">?</div>
             <div>
-              <div class="profile-fullname" id="profileFullName">—</div>
-              <div class="profile-username" id="profileUsername">@—</div>
-              <div class="profile-email" id="profileEmail">—</div>
+              <label style="font-size:.78rem;font-weight:600;display:block;margin-bottom:10px">🎤 Leadership
+                Roles</label>
+              <div class="chip-row" id="chips-leader">
+                <label class="chip-option" onclick="selectChip('chips-leader',this,'leader',2)">
+                  <input type="radio" name="leader" value="2">
+                  <span class="chip-icon">👑</span> President / Head
+                </label>
+                <label class="chip-option" onclick="selectChip('chips-leader',this,'leader',1)">
+                  <input type="radio" name="leader" value="1">
+                  <span class="chip-icon">🤝</span> Member
+                </label>
+                <label class="chip-option selected" onclick="selectChip('chips-leader',this,'leader',0)">
+                  <input type="radio" name="leader" value="0">
+                  <span class="chip-icon">😶</span> None
+                </label>
+              </div>
             </div>
           </div>
-          <div class="profile-stats-row">
-            <div class="profile-stat">
-              <div class="ps-num" id="ps-students">0</div>
-              <div class="ps-lbl">Students<br>Evaluated</div>
+
+          <!-- STEP 4: REVIEW -->
+          <div class="form-section" id="sec-4">
+            <div class="sec-label">Step 4 — Review & Submit</div>
+
+            <div id="reviewContent" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px">
             </div>
-            <div class="profile-stat">
-              <div class="ps-num" id="ps-sessions">1</div>
-              <div class="ps-lbl">Active<br>Session</div>
-            </div>
-            <div class="profile-stat">
-              <div class="ps-num" id="ps-joined">—</div>
-              <div class="ps-lbl">Member<br>Since</div>
+
+            <div
+              style="background:rgba(37,99,235,.05);border:1px solid rgba(37,99,235,.15);border-radius:12px;padding:14px 16px;margin-bottom:4px;">
+              <div style="font-size:.78rem;color:var(--accent);font-weight:600;margin-bottom:6px;">ℹ️ How is the score
+                calculated?</div>
+              <div style="font-size:.78rem;color:var(--muted);line-height:1.7;">
+                Score (0–100) = weighted sum of: Attendance (max 25) + Study Hours (max 10) + Internal Marks (max 25) +
+                Projects (max 15) + Internships (max 10) + Activities (max 10) + Certifications (max 5). Arrears or
+                score &lt;30 = Not Eligible.
+              </div>
             </div>
           </div>
-          <button onclick="showPage('form')" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:4px">+ Evaluate Student</button>
+
+          <div class="form-footer">
+            <span class="step-count" id="stepCount">Step 1 of 4</span>
+            <div class="btn-row">
+              <button class="btn btn-ghost" id="prevBtn" onclick="goStep(-1)" style="visibility:hidden">← Back</button>
+              <button class="btn btn-primary" id="nextBtn" onclick="goStep(1)">Continue →</button>
+            </div>
+          </div>
         </div>
 
-        <!-- TOP PERFORMERS CARD -->
-        <div class="pcard">
-          <div class="pcard-header">
-            <span class="pcard-title">🥇 Top Performers</span>
-            <span class="pcard-action" onclick="showPage('analytics')">See analytics</span>
-          </div>
-          <div id="topPerformersList" class="top-performers-list"></div>
-        </div>
-
-        <!-- DEPT BREAKDOWN -->
-        <div class="pcard">
-          <div class="pcard-header">
-            <span class="pcard-title">🏫 Dept. Split</span>
-          </div>
-          <div id="deptSplit" class="dept-split"></div>
-        </div>
-
-        <!-- QUICK ACTIONS -->
-        <div class="pcard">
-          <div class="pcard-header"><span class="pcard-title">⚡ Quick Actions</span></div>
-          <div class="quick-actions-grid">
-            <button class="qa-btn" onclick="showPage('form')">
-              <span class="qa-icon">📝</span>
-              <span>Evaluate</span>
-            </button>
-            <button class="qa-btn" onclick="showPage('analytics')">
-              <span class="qa-icon">📈</span>
-              <span>Analytics</span>
-            </button>
-            <button class="qa-btn" onclick="exportCSV()">
-              <span class="qa-icon">⬇</span>
-              <span>Export CSV</span>
-            </button>
-            <button class="qa-btn" onclick="clearAllStudents()">
-              <span class="qa-icon" style="color:var(--danger)">🗑</span>
-              <span style="color:var(--danger)">Clear All</span>
-            </button>
+        <div class="s-card" style="margin-top:20px;">
+          <div class="s-card-header">Input Summary</div>
+          <div class="summary-list">
+            <div class="s-item"><span class="s-key">Name</span><span class="s-val" id="s-name">—</span></div>
+            <div class="s-item"><span class="s-key">Register No</span><span class="s-val" id="s-reg">—</span></div>
+            <div class="s-item"><span class="s-key">Attendance</span><span class="s-val" id="s-att">0%</span></div>
+            <div class="s-item"><span class="s-key">Study Hours</span><span class="s-val" id="s-hrs">0 hrs</span></div>
+            <div class="s-item"><span class="s-key">Internal</span><span class="s-val" id="s-int">—</span></div>
+            <div class="s-item"><span class="s-key">Projects</span><span class="s-val" id="s-proj">0</span></div>
+            <div class="s-item"><span class="s-key">Internships</span><span class="s-val" id="s-intern">0</span></div>
+            <div class="s-item"><span class="s-key">Arrears</span><span class="s-val" id="s-arr"
+                style="color:var(--danger)">0</span></div>
           </div>
         </div>
 
       </div>
-    </div>
 
-    <!-- STUDENT RECORDS TABLE (FULL WIDTH) -->
-    <div class="pcard" style="margin-top:0">
-      <div class="pcard-header" style="flex-wrap:wrap;gap:10px">
-        <span class="pcard-title">📋 Student Records <span id="recordCount" style="font-size:.72rem;color:var(--muted);font-weight:400"></span></span>
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-          <select id="levelFilter" onchange="renderTable()" style="padding:7px 11px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.8rem;color:var(--ink);background:#fff;outline:none;cursor:pointer">
-            <option value="">All Levels</option>
-            <option value="advanced">🏆 Advanced</option>
-            <option value="adv_intermediate">🌟 Adv. Intermediate</option>
-            <option value="intermediate">📘 Intermediate</option>
-            <option value="basic">📗 Basic</option>
-            <option value="ineligible">❌ Not Eligible</option>
-          </select>
-          <select id="sortBy" onchange="renderTable()" style="padding:7px 11px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.8rem;color:var(--ink);background:#fff;outline:none;cursor:pointer">
-            <option value="score">Sort: Score ↓</option>
-            <option value="name">Sort: Name A–Z</option>
-            <option value="attendance">Sort: Attendance ↓</option>
-            <option value="internal">Sort: Internal ↓</option>
-          </select>
-          <div class="search-box">
-            🔍 <input type="text" id="searchInput" placeholder="Search name or reg no..." oninput="renderTable()">
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <div class="s-card">
+          <div class="s-card-header">
+            Live Score Preview
+            <span style="font-size:.72rem;color:var(--muted);font-weight:400">Updates as you type</span>
           </div>
-          <button onclick="exportCSV()" style="padding:7px 14px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;transition:.2s" onmouseover="this.style.background='#1e40af'" onmouseout="this.style.background='var(--primary)'">⬇ Export</button>
+          <div class="score-section">
+            <div class="ring-wrap">
+              <svg width="130" height="130" viewBox="0 0 130 130">
+                <circle class="ring-bg" cx="65" cy="65" r="54" />
+                <circle class="ring-fg" id="ringFg" cx="65" cy="65" r="54" stroke="#2563eb" />
+              </svg>
+              <div class="ring-center">
+                <div class="ring-num" id="ringNum">0</div>
+                <div class="ring-lbl">/ 100</div>
+              </div>
+            </div>
+            <div class="level-pill level-pending" id="levelPill">— Not Evaluated</div>
+          </div>
+          <div class="score-meter">
+            <div class="meter-row">
+              <span class="m-label">Attendance</span>
+              <div class="meter-bar">
+                <div class="meter-fill" id="m-att" style="width:0%"></div>
+              </div>
+              <span class="meter-val" id="mv-att">0</span>
+            </div>
+            <div class="meter-row">
+              <span class="m-label">Study Hours</span>
+              <div class="meter-bar">
+                <div class="meter-fill" id="m-hrs" style="width:0%"></div>
+              </div>
+              <span class="meter-val" id="mv-hrs">0</span>
+            </div>
+            <div class="meter-row">
+              <span class="m-label">Internal</span>
+              <div class="meter-bar">
+                <div class="meter-fill" id="m-int" style="width:0%"></div>
+              </div>
+              <span class="meter-val" id="mv-int">—</span>
+            </div>
+            <div class="meter-row">
+              <span class="m-label">Projects</span>
+              <div class="meter-bar">
+                <div class="meter-fill" id="m-proj" style="width:0%"></div>
+              </div>
+              <span class="meter-val" id="mv-proj">0</span>
+            </div>
+            <div class="meter-row">
+              <span class="m-label">Internships</span>
+              <div class="meter-bar">
+                <div class="meter-fill" id="m-intern" style="width:0%"></div>
+              </div>
+              <span class="meter-val" id="mv-intern">0</span>
+            </div>
+          </div>
+          <div class="eligibility-box elig-ok" id="eligBox">
+            <span>✅</span> Currently Eligible
+          </div>
+          <div style="padding:0 20px 16px">
+            <div
+              style="font-size:.68rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px">
+              Score Thresholds</div>
+            <div
+              style="position:relative;height:10px;border-radius:5px;overflow:hidden;background:linear-gradient(90deg,#ef4444 0%,#ef4444 30%,#f59e0b 30%,#f59e0b 50%,#3b82f6 50%,#3b82f6 60%,#8b5cf6 60%,#8b5cf6 80%,#10b981 80%,#10b981 100%)">
+            </div>
+            <div style="display:flex;justify-content:space-between;margin-top:4px">
+              <span style="font-size:.6rem;color:var(--muted)">0</span>
+              <span style="font-size:.6rem;color:var(--muted)">30</span>
+              <span style="font-size:.6rem;color:var(--muted)">50</span>
+              <span style="font-size:.6rem;color:var(--muted)">60</span>
+              <span style="font-size:.6rem;color:var(--muted)">80</span>
+              <span style="font-size:.6rem;color:var(--muted)">100</span>
+            </div>
+            <div id="scoreThresholdMarker"
+              style="margin-top:6px;font-size:.75rem;font-weight:700;color:var(--accent);text-align:center"></div>
+          </div>
+        </div>
+
+        <div class="s-card" style="background:linear-gradient(135deg,var(--primary),#1e40af)">
+          <div style="padding:20px;color:#fff">
+            <div
+              style="font-size:.75rem;opacity:.6;margin-bottom:8px;font-weight:600;letter-spacing:.06em;text-transform:uppercase">
+              Scoring Guide (out of 100)</div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;font-size:.78rem;opacity:.8"><span>🟢
+                  Advanced</span><span style="font-weight:700">80 – 100</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:.78rem;opacity:.8"><span>🟣 Adv.
+                  Intermediate</span><span style="font-weight:700">60 – 79</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:.78rem;opacity:.8"><span>🔵
+                  Intermediate</span><span style="font-weight:700">50 – 59</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:.78rem;opacity:.8"><span>🟡
+                  Basic</span><span style="font-weight:700">30 – 49</span></div>
+              <div style="display:flex;justify-content:space-between;font-size:.78rem;opacity:.8"><span>🔴 Not
+                  Eligible</span><span style="font-weight:700">&lt; 30 or Arrears</span></div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="table-wrap">
-        <table id="studentTable">
-          <thead>
-            <tr>
-              <th>#</th><th>Student</th><th>Department</th><th>Semester</th>
-              <th>Batch</th><th>Attendance</th><th>Study Hrs</th>
-              <th>Internal</th><th>Arrears</th><th>Score /100</th><th>Level</th><th></th>
-            </tr>
-          </thead>
-          <tbody id="tableBody">
-            <tr><td colspan="12"><div class="empty-state"><div class="empty-icon">📭</div><p>No students yet. <strong>Evaluate</strong> one to get started!</p></div></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-  </div><!-- /pdash-wrap -->
-</div>
-
-<div class="page" id="page-analytics">
-  <div class="dash-hero">
-    <div>
-      <h2>Analytics & Insights</h2>
-      <p>Performance distribution and trends across all students</p>
     </div>
   </div>
 
-  <div class="analytics-wrap" style="margin-top:24px;">
-    <div class="chart-grid">
-      <div class="chart-card">
-        <h4>📊 Score Distribution</h4>
-        <div class="bar-chart" id="barChart"></div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!--  PAGE: DASHBOARD                                          -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="page" id="page-dashboard">
+
+    <!-- PERSONALIZED HERO BANNER -->
+    <div class="pdash-hero">
+      <div class="pdash-hero-left">
+        <div class="pdash-greeting" id="pdashGreeting">Good morning</div>
+        <h2 class="pdash-name" id="pdashName">Dashboard</h2>
+        <p class="pdash-subtitle" id="pdashSubtitle">Here's your performance overview</p>
+        <div class="pdash-hero-chips">
+          <div class="phero-chip" id="pheroDate"></div>
+          <div class="phero-chip" id="pheroMember"></div>
+        </div>
       </div>
-      <div class="chart-card">
-        <h4>🍩 Level Distribution</h4>
-        <div class="donut-wrap">
-          <div class="donut-canvas">
-            <svg id="donutSvg" width="120" height="120" viewBox="0 0 120 120">
-              <circle cx="60" cy="60" r="45" fill="none" stroke="#e2e8f0" stroke-width="18"/>
-              <g id="donutArcs"></g>
-            </svg>
+      <div class="pdash-hero-right">
+        <div class="pdash-avatar-ring" id="pdashAvatarRing">
+          <div class="pdash-avatar" id="pdashAvatar">?</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PERSONAL PROFILE CARD -->
+    <div class="pdash-wrap">
+
+      <!-- TOP: QUICK STATS ROW -->
+      <div class="pstat-row">
+        <div class="pstat-card" style="--accent-c:#2563eb">
+          <div class="pstat-icon" style="background:rgba(37,99,235,.1)">📋</div>
+          <div class="pstat-num" id="pk-total">0</div>
+          <div class="pstat-lbl">Total Students</div>
+          <div class="pstat-trend" id="pk-total-trend"></div>
+        </div>
+        <div class="pstat-card" style="--accent-c:#10b981">
+          <div class="pstat-icon" style="background:rgba(16,185,129,.1)">🏆</div>
+          <div class="pstat-num" id="pk-adv">0</div>
+          <div class="pstat-lbl">Advanced+</div>
+          <div class="pstat-trend" id="pk-adv-rate"></div>
+        </div>
+        <div class="pstat-card" style="--accent-c:#f59e0b">
+          <div class="pstat-icon" style="background:rgba(245,158,11,.1)">📈</div>
+          <div class="pstat-num" id="pk-avg">—</div>
+          <div class="pstat-lbl">Avg Score /100</div>
+          <div class="pstat-trend" id="pk-avg-bar"></div>
+        </div>
+        <div class="pstat-card" style="--accent-c:#8b5cf6">
+          <div class="pstat-icon" style="background:rgba(139,92,246,.1)">🎯</div>
+          <div class="pstat-num" id="pk-top">—</div>
+          <div class="pstat-lbl">Top Score</div>
+          <div class="pstat-trend" id="pk-top-name"></div>
+        </div>
+        <div class="pstat-card" style="--accent-c:#06b6d4">
+          <div class="pstat-icon" style="background:rgba(6,182,212,.1)">📅</div>
+          <div class="pstat-num" id="pk-att">—</div>
+          <div class="pstat-lbl">Avg Attendance</div>
+          <div class="pstat-trend" id="pk-att-bar"></div>
+        </div>
+        <div class="pstat-card" style="--accent-c:#ef4444">
+          <div class="pstat-icon" style="background:rgba(239,68,68,.1)">❌</div>
+          <div class="pstat-num" id="pk-inelig">0</div>
+          <div class="pstat-lbl">Not Eligible</div>
+          <div class="pstat-trend" id="pk-inelig-rate"></div>
+        </div>
+      </div>
+
+      <!-- MIDDLE: TWO COLUMN LAYOUT -->
+      <div class="pmid-grid">
+
+        <!-- LEFT COLUMN -->
+        <div class="pmid-left">
+
+          <!-- ACTIVITY TIMELINE -->
+          <div class="pcard">
+            <div class="pcard-header">
+              <span class="pcard-title">📌 Recent Activity</span>
+              <span class="pcard-action" onclick="showPage('form')">+ Add New</span>
+            </div>
+            <div id="activityTimeline" class="activity-timeline"></div>
           </div>
-          <div class="donut-legend" id="donutLegend"></div>
+
+          <!-- PERFORMANCE BREAKDOWN -->
+          <div class="pcard">
+            <div class="pcard-header">
+              <span class="pcard-title">🧩 Class Performance Breakdown</span>
+              <span id="breakdownCount" style="font-size:.73rem;color:var(--muted)"></span>
+            </div>
+            <div class="breakdown-levels" id="breakdownLevels"></div>
+          </div>
+
+          <!-- SUBJECT AVERAGES -->
+          <div class="pcard">
+            <div class="pcard-header">
+              <span class="pcard-title">📊 Component Averages</span>
+              <span style="font-size:.72rem;color:var(--muted)">Across all students</span>
+            </div>
+            <div id="componentAvgs" class="component-avgs"></div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="pmid-right">
+
+          <!-- PROFILE CARD -->
+          <div class="pcard profile-card">
+            <div class="profile-card-top">
+              <div class="profile-big-avatar" id="profileBigAvatar">?</div>
+              <div>
+                <div class="profile-fullname" id="profileFullName">—</div>
+                <div class="profile-username" id="profileUsername">@—</div>
+                <div class="profile-email" id="profileEmail">—</div>
+              </div>
+            </div>
+            <div class="profile-stats-row">
+              <div class="profile-stat">
+                <div class="ps-num" id="ps-students">0</div>
+                <div class="ps-lbl">Students<br>Evaluated</div>
+              </div>
+              <div class="profile-stat">
+                <div class="ps-num" id="ps-sessions">1</div>
+                <div class="ps-lbl">Active<br>Session</div>
+              </div>
+              <div class="profile-stat">
+                <div class="ps-num" id="ps-joined">—</div>
+                <div class="ps-lbl">Member<br>Since</div>
+              </div>
+            </div>
+            <button onclick="showPage('form')" class="btn btn-primary"
+              style="width:100%;justify-content:center;margin-top:4px">+ Evaluate Student</button>
+          </div>
+
+          <!-- TOP PERFORMERS CARD -->
+          <div class="pcard">
+            <div class="pcard-header">
+              <span class="pcard-title">🥇 Top Performers</span>
+              <span class="pcard-action" onclick="showPage('analytics')">See analytics</span>
+            </div>
+            <div id="topPerformersList" class="top-performers-list"></div>
+          </div>
+
+          <!-- DEPT BREAKDOWN -->
+          <div class="pcard">
+            <div class="pcard-header">
+              <span class="pcard-title">🏫 Dept. Split</span>
+            </div>
+            <div id="deptSplit" class="dept-split"></div>
+          </div>
+
+          <!-- QUICK ACTIONS -->
+          <div class="pcard">
+            <div class="pcard-header"><span class="pcard-title">⚡ Quick Actions</span></div>
+            <div class="quick-actions-grid">
+              <button class="qa-btn" onclick="showPage('form')">
+                <span class="qa-icon">📝</span>
+                <span>Evaluate</span>
+              </button>
+              <button class="qa-btn" onclick="showPage('analytics')">
+                <span class="qa-icon">📈</span>
+                <span>Analytics</span>
+              </button>
+              <button class="qa-btn" onclick="exportCSV()">
+                <span class="qa-icon">⬇</span>
+                <span>Export CSV</span>
+              </button>
+              <button class="qa-btn" onclick="clearAllStudents()">
+                <span class="qa-icon" style="color:var(--danger)">🗑</span>
+                <span style="color:var(--danger)">Clear All</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- STUDENT RECORDS TABLE (FULL WIDTH) -->
+      <div class="pcard" style="margin-top:0">
+        <div class="pcard-header" style="flex-wrap:wrap;gap:10px">
+          <span class="pcard-title">📋 Student Records <span id="recordCount"
+              style="font-size:.72rem;color:var(--muted);font-weight:400"></span></span>
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <select id="levelFilter" onchange="renderTable()"
+              style="padding:7px 11px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.8rem;color:var(--ink);background:#fff;outline:none;cursor:pointer">
+              <option value="">All Levels</option>
+              <option value="advanced">🏆 Advanced</option>
+              <option value="adv_intermediate">🌟 Adv. Intermediate</option>
+              <option value="intermediate">📘 Intermediate</option>
+              <option value="basic">📗 Basic</option>
+              <option value="ineligible">❌ Not Eligible</option>
+            </select>
+            <select id="sortBy" onchange="renderTable()"
+              style="padding:7px 11px;border:1.5px solid var(--border);border-radius:8px;font-family:inherit;font-size:.8rem;color:var(--ink);background:#fff;outline:none;cursor:pointer">
+              <option value="score">Sort: Score ↓</option>
+              <option value="name">Sort: Name A–Z</option>
+              <option value="attendance">Sort: Attendance ↓</option>
+              <option value="internal">Sort: Internal ↓</option>
+            </select>
+            <div class="search-box">
+              🔍 <input type="text" id="searchInput" placeholder="Search name or reg no..." oninput="renderTable()">
+            </div>
+            <button onclick="exportCSV()"
+              style="padding:7px 14px;background:var(--primary);color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:.78rem;font-weight:600;cursor:pointer;transition:.2s"
+              onmouseover="this.style.background='#1e40af'" onmouseout="this.style.background='var(--primary)'">⬇
+              Export</button>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table id="studentTable">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Student</th>
+                <th>Department</th>
+                <th>Semester</th>
+                <th>Batch</th>
+                <th>Attendance</th>
+                <th>Study Hrs</th>
+                <th>Internal</th>
+                <th>Arrears</th>
+                <th>Score /100</th>
+                <th>Level</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              <tr>
+                <td colspan="12">
+                  <div class="empty-state">
+                    <div class="empty-icon">📭</div>
+                    <p>No students yet. <strong>Evaluate</strong> one to get started!</p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- /pdash-wrap -->
+  </div>
+
+  <div class="page" id="page-analytics">
+    <div class="dash-hero">
+      <div>
+        <h2>Analytics & Insights</h2>
+        <p>Performance distribution and trends across all students</p>
+      </div>
+    </div>
+
+    <div class="analytics-wrap" style="margin-top:24px;">
+      <div class="chart-grid">
+        <div class="chart-card">
+          <h4>📊 Score Distribution</h4>
+          <div class="bar-chart" id="barChart"></div>
+        </div>
+        <div class="chart-card">
+          <h4>🍩 Level Distribution</h4>
+          <div class="donut-wrap">
+            <div class="donut-canvas">
+              <svg id="donutSvg" width="120" height="120" viewBox="0 0 120 120">
+                <circle cx="60" cy="60" r="45" fill="none" stroke="#e2e8f0" stroke-width="18" />
+                <g id="donutArcs"></g>
+              </svg>
+            </div>
+            <div class="donut-legend" id="donutLegend"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="chart-grid">
+        <div class="chart-card">
+          <h4>📚 Avg Study Hours vs Attendance</h4>
+          <div id="scatterInfo" style="color:var(--muted);font-size:.85rem;text-align:center;padding:40px 0">
+            Add students to see trends
+          </div>
+        </div>
+        <div class="chart-card">
+          <h4>🏆 Top 5 Performers</h4>
+          <div id="topPerformers"></div>
         </div>
       </div>
     </div>
+  </div>
 
-    <div class="chart-grid">
-      <div class="chart-card">
-        <h4>📚 Avg Study Hours vs Attendance</h4>
-        <div id="scatterInfo" style="color:var(--muted);font-size:.85rem;text-align:center;padding:40px 0">
-          Add students to see trends
-        </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!--  RESULT MODAL                                             -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="overlay" id="resultOverlay">
+    <div class="modal">
+      <div class="modal-band" id="modalBand">
+        <span class="modal-icon" id="modalIcon">🎓</span>
+        <h2 id="modalTitle">Result</h2>
+        <div class="modal-sub" id="modalSub"></div>
       </div>
-      <div class="chart-card">
-        <h4>🏆 Top 5 Performers</h4>
-        <div id="topPerformers"></div>
+      <div class="modal-body">
+        <div class="result-score-big" id="modalScore"></div>
+        <div class="result-score-lbl">Performance Score</div>
+        <div class="result-grid" id="modalGrid"></div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeModal()">Close</button>
+        <button class="btn btn-primary" onclick="closeModal();showPage('dashboard')">View Dashboard →</button>
       </div>
     </div>
   </div>
-</div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
 
 
-<!-- ══════════════════════════════════════════════════════════ -->
-<!--  RESULT MODAL                                             -->
-<!-- ══════════════════════════════════════════════════════════ -->
-<div class="overlay" id="resultOverlay">
-  <div class="modal">
-    <div class="modal-band" id="modalBand">
-      <span class="modal-icon" id="modalIcon">🎓</span>
-      <h2 id="modalTitle">Result</h2>
-      <div class="modal-sub" id="modalSub"></div>
-    </div>
-    <div class="modal-body">
-      <div class="result-score-big" id="modalScore"></div>
-      <div class="result-score-lbl">Performance Score</div>
-      <div class="result-grid" id="modalGrid"></div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal()">Close</button>
-      <button class="btn btn-primary" onclick="closeModal();showPage('dashboard')">View Dashboard →</button>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!--  TERMS OF SERVICE MODAL                                   -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="legal-overlay" id="tosModal">
+    <div class="legal-modal">
+      <button class="legal-close" onclick="closeLegalModal('tosModal')">&times;</button>
+      <div class="legal-content">
+        <h2>📄 Terms of Service</h2>
+        <p class="legal-subtitle">Student Performance Prediction &amp; Management System</p>
+        <p class="legal-date">Effective Date: February 26, 2026</p>
+        <p>Welcome to the Klyra Student Performance Prediction &amp; Management System. By accessing or using this
+          system, you agree to the following terms:</p>
+
+        <h3>1. Purpose of the System</h3>
+        <p>This system is designed to:</p>
+        <ul>
+          <li>Evaluate student academic performance</li>
+          <li>Predict performance level (Basic / Intermediate / Advanced)</li>
+          <li>Provide analytics and insights for educational improvement</li>
+        </ul>
+        <p>This system is intended for educational and academic use only.</p>
+
+        <h3>2. User Accounts</h3>
+        <ul>
+          <li>Users must register with valid username, email, and password</li>
+          <li>You are responsible for maintaining your account security</li>
+          <li>Sharing login credentials is strictly prohibited</li>
+        </ul>
+
+        <h3>3. Acceptable Use</h3>
+        <p>Users agree:</p>
+        <ul>
+          <li>To enter accurate student data (marks, attendance, etc.)</li>
+          <li>Not to misuse, manipulate, or exploit prediction results</li>
+          <li>Not to access other user accounts without permission</li>
+        </ul>
+
+        <h3>4. Data and Predictions</h3>
+        <ul>
+          <li>The system generates predictions based on input data</li>
+          <li>Results are approximate and not 100% guaranteed</li>
+          <li>Predictions should not be treated as final academic decisions</li>
+        </ul>
+
+        <h3>5. Student Records Management</h3>
+        <ul>
+          <li>Users can add, view, and delete student records</li>
+          <li>The system stores data for dashboard and analytics purposes</li>
+          <li>Any misuse of student information is strictly prohibited</li>
+        </ul>
+
+        <h3>6. System Availability</h3>
+        <p>We aim to provide continuous access, but:</p>
+        <ul>
+          <li>The system may be temporarily unavailable due to maintenance</li>
+          <li>No guarantee of uninterrupted service</li>
+        </ul>
+
+        <h3>7. Limitation of Liability</h3>
+        <p>The developers are not responsible for:</p>
+        <ul>
+          <li>Decisions made based on prediction results</li>
+          <li>Data loss due to technical issues</li>
+          <li>Incorrect inputs provided by users</li>
+        </ul>
+
+        <h3>8. Changes to Terms</h3>
+        <p>We may update these Terms at any time. Continued use means acceptance of updated terms.</p>
+      </div>
+      <div class="legal-footer">
+        <button class="btn btn-primary" onclick="closeLegalModal('tosModal')">I Understand</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- TOAST -->
-<div class="toast" id="toast"></div>
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!--  PRIVACY POLICY MODAL                                     -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="legal-overlay" id="privacyModal">
+    <div class="legal-modal">
+      <button class="legal-close" onclick="closeLegalModal('privacyModal')">&times;</button>
+      <div class="legal-content">
+        <h2>🔐 Privacy Policy</h2>
+        <p class="legal-subtitle">Student Performance Prediction &amp; Management System</p>
+        <p class="legal-date">Effective Date: February 26, 2026</p>
+        <p>Your privacy is important to us. This policy explains how your data is handled.</p>
 
+        <h3>1. Information We Collect</h3>
+        <h4>👤 Account Data</h4>
+        <ul>
+          <li>First Name / Last Name</li>
+          <li>Username</li>
+          <li>Email Address</li>
+          <li>Password (stored securely)</li>
+        </ul>
+        <h4>🎓 Student Data</h4>
+        <ul>
+          <li>Student Name</li>
+          <li>Register Number</li>
+          <li>Department &amp; Semester</li>
+          <li>Attendance Percentage</li>
+          <li>Internal Marks</li>
+          <li>Study Hours</li>
+          <li>Arrears</li>
+          <li>Activities / Performance Inputs</li>
+        </ul>
 
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+        <h3>2. How We Use Data</h3>
+        <p>We use collected data to:</p>
+        <ul>
+          <li>Predict student performance score (0–100)</li>
+          <li>Classify levels (Basic / Intermediate / Advanced)</li>
+          <li>Show dashboard analytics and charts</li>
+          <li>Improve academic insights</li>
+        </ul>
+
+        <h3>3. Data Storage</h3>
+        <ul>
+          <li>Data is stored in a secure database</li>
+          <li>Data is used only within this system</li>
+          <li>We do not sell or share data with third parties</li>
+        </ul>
+
+        <h3>4. Data Security</h3>
+        <ul>
+          <li>User login authentication is implemented</li>
+          <li>Basic security measures are used to protect data</li>
+          <li>However, no system is completely secure</li>
+        </ul>
+
+        <h3>5. User Rights</h3>
+        <p>Users can:</p>
+        <ul>
+          <li>View their data</li>
+          <li>Delete student records</li>
+          <li>Update account information</li>
+        </ul>
+
+        <h3>6. Cookies / Local Storage</h3>
+        <ul>
+          <li>The system may use local storage/session storage for login and data handling</li>
+          <li>This improves user experience and session management</li>
+        </ul>
+
+        <h3>7. Data Retention</h3>
+        <ul>
+          <li>Data is stored for academic analysis</li>
+          <li>Users can remove data anytime</li>
+        </ul>
+
+        <h3>8. Contact Information</h3>
+        <p>For any issues or queries:</p>
+        <ul>
+          <li>📧 Email: <a href="mailto:mohaideenmubeen786@gmail.com"
+              style="color:var(--accent);font-weight:600">mohaideenmubeen786@gmail.com</a></li>
+          <li>🏫 Institution: The New College</li>
+        </ul>
+      </div>
+      <div class="legal-footer">
+        <button class="btn btn-primary" onclick="closeLegalModal('privacyModal')">I Understand</button>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .legal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(0, 0, 0, .55);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .legal-overlay.show {
+      display: flex;
+      animation: fadeUp .25s ease;
+    }
+
+    .legal-modal {
+      background: #fff;
+      border-radius: 20px;
+      max-width: 640px;
+      width: 100%;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
+      position: relative;
+    }
+
+    .legal-close {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      color: var(--muted);
+      cursor: pointer;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: .15s;
+      z-index: 2;
+    }
+
+    .legal-close:hover {
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    .legal-content {
+      padding: 36px 32px 20px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .legal-content h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 4px;
+      letter-spacing: -.02em;
+    }
+
+    .legal-content .legal-subtitle {
+      font-size: .85rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .legal-content .legal-date {
+      font-size: .75rem;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .legal-content h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-top: 22px;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .legal-content h4 {
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-top: 12px;
+      margin-bottom: 6px;
+    }
+
+    .legal-content p {
+      font-size: .84rem;
+      color: #374151;
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+
+    .legal-content ul {
+      padding-left: 20px;
+      margin-bottom: 10px;
+    }
+
+    .legal-content li {
+      font-size: .82rem;
+      color: #4b5563;
+      line-height: 1.8;
+      position: relative;
+    }
+
+    .legal-content li::marker {
+      color: var(--accent);
+    }
+
+    .legal-footer {
+      padding: 16px 32px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    @media (max-width: 640px) {
+      .legal-modal {
+        max-height: 90vh;
+        border-radius: 16px;
+      }
+
+      .legal-content {
+        padding: 28px 20px 16px;
+      }
+
+      .legal-footer {
+        padding: 14px 20px;
+      }
+    }
+  </style>
+
+  <script>
+    function openLegalModal(id) {
+      const m = document.getElementById(id);
+      if (m) m.classList.add('show');
+    }
+    function closeLegalModal(id) {
+      const m = document.getElementById(id);
+      if (m) m.classList.remove('show');
+    }
+  </script>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
+
+
 </html>

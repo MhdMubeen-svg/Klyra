@@ -5,10 +5,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description"
-    content="Mubeen — A student performance evaluation and management system. Score, classify, and monitor student academic performance in real time.">
+    content="Klyra — A student performance evaluation and management system. Score, classify, and monitor student academic performance in real time.">
   <link rel="icon"
-    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
-  <title>Mubeen — Student Performance System</title>
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%236366f1'/><stop offset='100%25' stop-color='%23a855f7'/></linearGradient></defs><polygon points='50,10 85,35 75,80 25,80 15,35' fill='url(%23g)' rx='4'/><polygon points='50,22 72,40 65,70 35,70 28,40' fill='%23fff' opacity='.25'/></svg>">
+  <title>Klyra — Student Performance System</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:wght@300;400;500;600&display=swap"
     rel="stylesheet">
@@ -28,12 +28,18 @@
       <div class="auth-brand">
         <div class="auth-brand-icon">
           <svg viewBox="0 0 24 24">
-            <path d="M12 2L2 7l10 5 10-5-10-5z" />
-            <polyline points="2 17 12 22 22 17" />
-            <polyline points="2 12 12 17 22 12" />
+            <defs>
+              <linearGradient id="klyraGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#818cf8" />
+                <stop offset="100%" stop-color="#c084fc" />
+              </linearGradient>
+            </defs>
+            <polygon points="12,2 21,8 18,20 6,20 3,8" fill="url(#klyraGrad)" stroke="none" />
+            <polygon points="12,5 18,9.5 16,17.5 8,17.5 6,9.5" fill="#fff" opacity=".2" stroke="none" />
+            <path d="M12,8 L15,12 L12,20 L9,12 Z" fill="#fff" opacity=".35" stroke="none" />
           </svg>
         </div>
-        <div class="auth-brand-name">Mubeen</div>
+        <div class="auth-brand-name">Klyra</div>
       </div>
 
       <h1 class="auth-headline">Track Student<br><em>Performance</em><br>Smarter.</h1>
@@ -70,7 +76,7 @@
 
       <!-- LOGIN PANEL -->
       <div class="auth-form-panel active" id="panelLogin">
-        <div class="auth-title">Welcome back 👋</div>
+        <div class="auth-title">Welcome 👋</div>
         <div class="auth-desc">Sign in to your account to continue</div>
 
         <div id="loginAlert" class="auth-alert"></div>
@@ -113,7 +119,7 @@
       <!-- SIGNUP PANEL -->
       <div class="auth-form-panel" id="panelSignup">
         <div class="auth-title">Create Account 🚀</div>
-        <div class="auth-desc">Join Mubeen and start evaluating student performance</div>
+        <div class="auth-desc">Join Klyra and start evaluating student performance</div>
 
         <div id="signupAlert" class="auth-alert"></div>
 
@@ -184,10 +190,14 @@
           style="background:rgba(37,99,235,.05);border:1px solid rgba(37,99,235,.12);border-radius:8px;padding:10px 13px;margin-bottom:14px">
           <label style="display:flex;align-items:flex-start;gap:8px;cursor:pointer;font-size:.78rem;color:var(--muted)">
             <input type="checkbox" id="signupAgree" style="margin-top:2px;accent-color:var(--accent)">
-            <span>I agree to the <a style="color:var(--accent);font-weight:600">Terms of Service</a> and <a
-                style="color:var(--accent);font-weight:600">Privacy Policy</a></span>
+            <span>I agree to the <a style="color:var(--accent);font-weight:600;cursor:pointer"
+                onclick="event.stopPropagation();event.preventDefault();openLegalModal('tosModal')">Terms of Service</a>
+              and <a style="color:var(--accent);font-weight:600;cursor:pointer"
+                onclick="event.stopPropagation();event.preventDefault();openLegalModal('privacyModal')">Privacy
+                Policy</a></span>
           </label>
         </div>
+
 
         <button class="auth-btn" onclick="doSignup()">
           Create Account →
@@ -231,17 +241,50 @@
     <div class="brand">
       <div class="brand-icon">
         <svg viewBox="0 0 24 24">
-          <path d="M12 2L2 7l10 5 10-5-10-5z" />
-          <polyline points="2 17 12 22 22 17" />
-          <polyline points="2 12 12 17 22 12" />
+          <defs>
+            <linearGradient id="klyraNavGrad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#818cf8" />
+              <stop offset="100%" stop-color="#c084fc" />
+            </linearGradient>
+          </defs>
+          <polygon points="12,2 21,8 18,20 6,20 3,8" fill="url(#klyraNavGrad)" stroke="none" />
+          <polygon points="12,5 18,9.5 16,17.5 8,17.5 6,9.5" fill="#fff" opacity=".2" stroke="none" />
+          <path d="M12,8 L15,12 L12,20 L9,12 Z" fill="#fff" opacity=".35" stroke="none" />
         </svg>
       </div>
-      Mubeen
+      Klyra
     </div>
     <div class="nav-tabs">
-      <button class="nav-tab active" onclick="showPage('form')">📝 Evaluate</button>
-      <button class="nav-tab" onclick="showPage('dashboard')">📊 Dashboard</button>
-      <button class="nav-tab" onclick="showPage('analytics')">📈 Analytics</button>
+      <button class="nav-tab active" onclick="showPage('form')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+          <polyline points="14 2 14 8 20 8" />
+          <line x1="16" y1="13" x2="8" y2="13" />
+          <line x1="16" y1="17" x2="8" y2="17" />
+          <polyline points="10 9 9 9 8 9" />
+        </svg>
+        Evaluate
+      </button>
+      <button class="nav-tab" onclick="showPage('dashboard')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1" />
+          <rect x="14" y="3" width="7" height="7" rx="1" />
+          <rect x="3" y="14" width="7" height="7" rx="1" />
+          <rect x="14" y="14" width="7" height="7" rx="1" />
+        </svg>
+        Dashboard
+      </button>
+      <button class="nav-tab" onclick="showPage('analytics')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10" />
+          <line x1="12" y1="20" x2="12" y2="4" />
+          <line x1="6" y1="20" x2="6" y2="14" />
+        </svg>
+        Analytics
+      </button>
     </div>
     <div class="topbar-right" style="display:flex;align-items:center;gap:12px">
       <span class="total-badge" id="totalBadge">0 students</span>
@@ -333,42 +376,93 @@
                 <label>Department</label>
                 <select id="dept" onchange="updateAcadYear();updateSemesterOptions()">
                   <option value="">Select department</option>
-                  <optgroup label="── Arts &amp; Science ──">
-                    <option>B.Sc Computer Science</option>
-                    <option>B.Sc Information Technology</option>
-                    <option>B.Sc Mathematics</option>
-                    <option>B.Sc Physics</option>
-                    <option>B.Sc Chemistry</option>
-                    <option>B.Sc Microbiology</option>
-                    <option>B.Sc Biotechnology</option>
-                    <option>B.Sc Zoology</option>
-                    <option>B.Sc Botany</option>
-                    <option>B.Com (General)</option>
-                    <option>B.Com (Computer Applications)</option>
-                    <option>BBA (Business Administration)</option>
-                    <option>BA English Literature</option>
-                    <option>BA Tamil</option>
-                    <option>BA History</option>
-                    <option>BA Economics</option>
-                    <option>BA Sociology</option>
-                    <option>BSW (Social Work)</option>
+                  <optgroup label="── B.A. Programs ──">
+                    <option>B.A. Arabic</option>
+                    <option>B.A. English</option>
+                    <option>B.A. Economics</option>
+                    <option>B.A. History</option>
+                    <option>B.A. Sociology</option>
+                    <option>B.A. Tamil</option>
+                    <option>B.A. Urdu</option>
+                    <option>B.A. Business Economics</option>
+                    <option>B.A. Defence and Strategic Studies</option>
+                    <option>B.A. Criminology and Police Administration</option>
                   </optgroup>
-                  <optgroup label="── Engineering ──">
-                    <option>B.E / B.Tech Computer Science &amp; Engineering</option>
-                    <option>B.E / B.Tech Information Technology</option>
-                    <option>B.E / B.Tech Electronics &amp; Communication</option>
-                    <option>B.E / B.Tech Electrical &amp; Electronics</option>
-                    <option>B.E / B.Tech Mechanical Engineering</option>
-                    <option>B.E / B.Tech Civil Engineering</option>
-                    <option>B.E / B.Tech Aeronautical Engineering</option>
-                    <option>B.E / B.Tech Biomedical Engineering</option>
-                    <option>B.E / B.Tech Automobile Engineering</option>
-                    <option>B.E / B.Tech Chemical Engineering</option>
-                    <option>B.E / B.Tech Marine Engineering</option>
-                    <option>B.Tech Artificial Intelligence &amp; Data Science</option>
+                  <optgroup label="── B.Com. Programs ──">
+                    <option>B.Com. General</option>
+                    <option>B.Com. Corporate Secretaryship</option>
+                    <option>B.Com. Accounting and Finance</option>
+                    <option>B.Com. Bank Management</option>
+                    <option>B.Com. Professional Accounting</option>
+                    <option>B.Com. Information and Systems Management</option>
+                  </optgroup>
+                  <optgroup label="── BBA ──">
+                    <option>Bachelor of Business Administration</option>
+                  </optgroup>
+                  <optgroup label="── B.Sc. Programs ──">
+                    <option>B.Sc. Chemistry</option>
+                    <option>B.Sc. Physics</option>
+                    <option>B.Sc. Mathematics</option>
+                    <option>B.Sc. Advanced Zoology and Biotechnology</option>
+                    <option>B.Sc. Plant Biology and Plant Biotechnology</option>
+                    <option>B.Sc. Computer Science</option>
+                    <option>B.Sc. Computer Science with Artificial Intelligence</option>
+                    <option>B.Sc. Computer Science with Data Science</option>
+                    <option>B.Sc. Information Technology</option>
+                    <option>B.Sc. Biotechnology</option>
+                    <option>B.Sc. Electronic Media</option>
+                  </optgroup>
+                  <optgroup label="── BCA ──">
+                    <option>Bachelor of Computer Application</option>
+                  </optgroup>
+                  <optgroup label="── 🔧 Core Engineering ──">
+                    <option>B.Tech Computer Science and Engineering (CSE)</option>
+                    <option>B.Tech Information Technology (IT)</option>
+                    <option>B.Tech Mechanical Engineering (ME)</option>
+                    <option>B.Tech Civil Engineering (CE)</option>
+                    <option>B.Tech Electrical and Electronics Engineering (EEE)</option>
+                    <option>B.Tech Electronics and Communication Engineering (ECE)</option>
+                  </optgroup>
+                  <optgroup label="── 💻 Computer &amp; Tech ──">
+                    <option>B.Tech Artificial Intelligence (AI)</option>
+                    <option>B.Tech Artificial Intelligence and Data Science (AI &amp; DS)</option>
+                    <option>B.Tech Data Science (DS)</option>
                     <option>B.Tech Cyber Security</option>
-                    <option>B.Tech Robotics &amp; Automation</option>
+                    <option>B.Tech Internet of Things (IoT)</option>
+                    <option>B.Tech Software Engineering</option>
+                    <option>B.Tech Computer Engineering</option>
                   </optgroup>
+                  <optgroup label="── ⚙️ Specialized Engineering ──">
+                    <option>B.Tech Automobile Engineering</option>
+                    <option>B.Tech Aeronautical Engineering</option>
+                    <option>B.Tech Aerospace Engineering</option>
+                    <option>B.Tech Mechatronics Engineering</option>
+                    <option>B.Tech Robotics Engineering</option>
+                    <option>B.Tech Marine Engineering</option>
+                    <option>B.Tech Mining Engineering</option>
+                    <option>B.Tech Petroleum Engineering</option>
+                  </optgroup>
+                  <optgroup label="── 🔬 Science &amp; Industrial ──">
+                    <option>B.Tech Chemical Engineering</option>
+                    <option>B.Tech Biotechnology Engineering</option>
+                    <option>B.Tech Biomedical Engineering</option>
+                    <option>B.Tech Environmental Engineering</option>
+                    <option>B.Tech Agricultural Engineering</option>
+                    <option>B.Tech Food Technology</option>
+                  </optgroup>
+                  <optgroup label="── 🏗️ Design &amp; Infrastructure ──">
+                    <option>B.Arch Architecture</option>
+                    <option>B.Tech Construction Engineering</option>
+                    <option>B.Tech Structural Engineering</option>
+                  </optgroup>
+                  <optgroup label="── 🔌 Emerging Fields ──">
+                    <option>B.Tech Renewable Energy Engineering</option>
+                    <option>B.Tech Nanotechnology</option>
+                    <option>B.Tech Industrial Engineering</option>
+                    <option>B.Tech Production Engineering</option>
+                  </optgroup>
+
+
                 </select>
               </div>
               <div class="field">
@@ -405,7 +499,7 @@
               <div class="field">
                 <label>Gender</label>
                 <select id="gender">
-                  <option value="">Prefer not to say</option>
+                  <option value="">Select gender</option>
                   <option>Male</option>
                   <option>Female</option>
                   <option>Other</option>
@@ -481,11 +575,11 @@
               <label style="font-size:.78rem;font-weight:600;display:block;margin-bottom:10px">🏃 Sports
                 Participation</label>
               <div class="chip-row" id="chips-sports">
-                <label class="chip-option selected" onclick="selectChip('chips-sports',this,'sports',1)">
+                <label class="chip-option" onclick="selectChip('chips-sports',this,'sports',1)">
                   <input type="radio" name="sports" value="1">
                   <span class="chip-icon">⚽</span> Active Participant
                 </label>
-                <label class="chip-option" onclick="selectChip('chips-sports',this,'sports',0)">
+                <label class="chip-option selected" onclick="selectChip('chips-sports',this,'sports',0)">
                   <input type="radio" name="sports" value="0">
                   <span class="chip-icon">😶</span> Not Participating
                 </label>
@@ -496,7 +590,7 @@
               <label style="font-size:.78rem;font-weight:600;display:block;margin-bottom:10px">🌐 Outer College
                 Programs</label>
               <div class="chip-row" id="chips-outer">
-                <label class="chip-option selected" onclick="selectChip('chips-outer',this,'outer_programs',2)">
+                <label class="chip-option" onclick="selectChip('chips-outer',this,'outer_programs',2)">
                   <input type="radio" name="outer_programs" value="2">
                   <span class="chip-icon">🏆</span> Won Awards
                 </label>
@@ -504,7 +598,7 @@
                   <input type="radio" name="outer_programs" value="1">
                   <span class="chip-icon">🎯</span> Participated
                 </label>
-                <label class="chip-option" onclick="selectChip('chips-outer',this,'outer_programs',0)">
+                <label class="chip-option selected" onclick="selectChip('chips-outer',this,'outer_programs',0)">
                   <input type="radio" name="outer_programs" value="0">
                   <span class="chip-icon">😶</span> None
                 </label>
@@ -1001,7 +1095,331 @@
   <div class="toast" id="toast"></div>
 
 
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!--  TERMS OF SERVICE MODAL                                   -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="legal-overlay" id="tosModal">
+    <div class="legal-modal">
+      <button class="legal-close" onclick="closeLegalModal('tosModal')">&times;</button>
+      <div class="legal-content">
+        <h2>📄 Terms of Service</h2>
+        <p class="legal-subtitle">Student Performance Prediction &amp; Management System</p>
+        <p class="legal-date">Effective Date: February 26, 2026</p>
+        <p>Welcome to the Klyra Student Performance Prediction &amp; Management System. By accessing or using this
+          system, you agree to the following terms:</p>
+
+        <h3>1. Purpose of the System</h3>
+        <p>This system is designed to:</p>
+        <ul>
+          <li>Evaluate student academic performance</li>
+          <li>Predict performance level (Basic / Intermediate / Advanced)</li>
+          <li>Provide analytics and insights for educational improvement</li>
+        </ul>
+        <p>This system is intended for educational and academic use only.</p>
+
+        <h3>2. User Accounts</h3>
+        <ul>
+          <li>Users must register with valid username, email, and password</li>
+          <li>You are responsible for maintaining your account security</li>
+          <li>Sharing login credentials is strictly prohibited</li>
+        </ul>
+
+        <h3>3. Acceptable Use</h3>
+        <p>Users agree:</p>
+        <ul>
+          <li>To enter accurate student data (marks, attendance, etc.)</li>
+          <li>Not to misuse, manipulate, or exploit prediction results</li>
+          <li>Not to access other user accounts without permission</li>
+        </ul>
+
+        <h3>4. Data and Predictions</h3>
+        <ul>
+          <li>The system generates predictions based on input data</li>
+          <li>Results are approximate and not 100% guaranteed</li>
+          <li>Predictions should not be treated as final academic decisions</li>
+        </ul>
+
+        <h3>5. Student Records Management</h3>
+        <ul>
+          <li>Users can add, view, and delete student records</li>
+          <li>The system stores data for dashboard and analytics purposes</li>
+          <li>Any misuse of student information is strictly prohibited</li>
+        </ul>
+
+        <h3>6. System Availability</h3>
+        <p>We aim to provide continuous access, but:</p>
+        <ul>
+          <li>The system may be temporarily unavailable due to maintenance</li>
+          <li>No guarantee of uninterrupted service</li>
+        </ul>
+
+        <h3>7. Limitation of Liability</h3>
+        <p>The developers are not responsible for:</p>
+        <ul>
+          <li>Decisions made based on prediction results</li>
+          <li>Data loss due to technical issues</li>
+          <li>Incorrect inputs provided by users</li>
+        </ul>
+
+        <h3>8. Changes to Terms</h3>
+        <p>We may update these Terms at any time. Continued use means acceptance of updated terms.</p>
+      </div>
+      <div class="legal-footer">
+        <button class="btn btn-primary" onclick="closeLegalModal('tosModal')">I Understand</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <!--  PRIVACY POLICY MODAL                                     -->
+  <!-- ══════════════════════════════════════════════════════════ -->
+  <div class="legal-overlay" id="privacyModal">
+    <div class="legal-modal">
+      <button class="legal-close" onclick="closeLegalModal('privacyModal')">&times;</button>
+      <div class="legal-content">
+        <h2>🔐 Privacy Policy</h2>
+        <p class="legal-subtitle">Student Performance Prediction &amp; Management System</p>
+        <p class="legal-date">Effective Date: February 26, 2026</p>
+        <p>Your privacy is important to us. This policy explains how your data is handled.</p>
+
+        <h3>1. Information We Collect</h3>
+        <h4>👤 Account Data</h4>
+        <ul>
+          <li>First Name / Last Name</li>
+          <li>Username</li>
+          <li>Email Address</li>
+          <li>Password (stored securely)</li>
+        </ul>
+        <h4>🎓 Student Data</h4>
+        <ul>
+          <li>Student Name</li>
+          <li>Register Number</li>
+          <li>Department &amp; Semester</li>
+          <li>Attendance Percentage</li>
+          <li>Internal Marks</li>
+          <li>Study Hours</li>
+          <li>Arrears</li>
+          <li>Activities / Performance Inputs</li>
+        </ul>
+
+        <h3>2. How We Use Data</h3>
+        <p>We use collected data to:</p>
+        <ul>
+          <li>Predict student performance score (0–100)</li>
+          <li>Classify levels (Basic / Intermediate / Advanced)</li>
+          <li>Show dashboard analytics and charts</li>
+          <li>Improve academic insights</li>
+        </ul>
+
+        <h3>3. Data Storage</h3>
+        <ul>
+          <li>Data is stored in a secure database</li>
+          <li>Data is used only within this system</li>
+          <li>We do not sell or share data with third parties</li>
+        </ul>
+
+        <h3>4. Data Security</h3>
+        <ul>
+          <li>User login authentication is implemented</li>
+          <li>Basic security measures are used to protect data</li>
+          <li>However, no system is completely secure</li>
+        </ul>
+
+        <h3>5. User Rights</h3>
+        <p>Users can:</p>
+        <ul>
+          <li>View their data</li>
+          <li>Delete student records</li>
+          <li>Update account information</li>
+        </ul>
+
+        <h3>6. Cookies / Local Storage</h3>
+        <ul>
+          <li>The system may use local storage/session storage for login and data handling</li>
+          <li>This improves user experience and session management</li>
+        </ul>
+
+        <h3>7. Data Retention</h3>
+        <ul>
+          <li>Data is stored for academic analysis</li>
+          <li>Users can remove data anytime</li>
+        </ul>
+
+        <h3>8. Contact Information</h3>
+        <p>For any issues or queries:</p>
+        <ul>
+          <li>📧 Email: <a href="mailto:mohaideenmubeen786@gmail.com"
+              style="color:var(--accent);font-weight:600">mohaideenmubeen786@gmail.com</a></li>
+          <li>🏫 Institution: The New College</li>
+        </ul>
+      </div>
+      <div class="legal-footer">
+        <button class="btn btn-primary" onclick="closeLegalModal('privacyModal')">I Understand</button>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .legal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 10000;
+      background: rgba(0, 0, 0, .55);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .legal-overlay.show {
+      display: flex;
+      animation: fadeUp .25s ease;
+    }
+
+    .legal-modal {
+      background: #fff;
+      border-radius: 20px;
+      max-width: 640px;
+      width: 100%;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .25);
+      position: relative;
+    }
+
+    .legal-close {
+      position: absolute;
+      top: 16px;
+      right: 18px;
+      background: none;
+      border: none;
+      font-size: 1.6rem;
+      color: var(--muted);
+      cursor: pointer;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: .15s;
+      z-index: 2;
+    }
+
+    .legal-close:hover {
+      background: var(--bg);
+      color: var(--ink);
+    }
+
+    .legal-content {
+      padding: 36px 32px 20px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .legal-content h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--ink);
+      margin-bottom: 4px;
+      letter-spacing: -.02em;
+    }
+
+    .legal-content .legal-subtitle {
+      font-size: .85rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .legal-content .legal-date {
+      font-size: .75rem;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .legal-content h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-top: 22px;
+      margin-bottom: 8px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .legal-content h4 {
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-top: 12px;
+      margin-bottom: 6px;
+    }
+
+    .legal-content p {
+      font-size: .84rem;
+      color: #374151;
+      line-height: 1.7;
+      margin-bottom: 8px;
+    }
+
+    .legal-content ul {
+      padding-left: 20px;
+      margin-bottom: 10px;
+    }
+
+    .legal-content li {
+      font-size: .82rem;
+      color: #4b5563;
+      line-height: 1.8;
+      position: relative;
+    }
+
+    .legal-content li::marker {
+      color: var(--accent);
+    }
+
+    .legal-footer {
+      padding: 16px 32px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    @media (max-width: 640px) {
+      .legal-modal {
+        max-height: 90vh;
+        border-radius: 16px;
+      }
+
+      .legal-content {
+        padding: 28px 20px 16px;
+      }
+
+      .legal-footer {
+        padding: 14px 20px;
+      }
+    }
+  </style>
+
+  <script>
+    function openLegalModal(id) {
+      const m = document.getElementById(id);
+      if (m) m.classList.add('show');
+    }
+    function closeLegalModal(id) {
+      const m = document.getElementById(id);
+      if (m) m.classList.remove('show');
+    }
+  </script>
+
   <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
+
 
 </html>

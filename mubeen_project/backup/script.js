@@ -6,13 +6,26 @@ let currentUser = null;
 let currentStep = 1;
 const TOTAL_STEPS = 4;
 
-let chipVals = { sports: 1, outer_programs: 2, leader: 0 };
+let chipVals = { sports: 0, outer_programs: 0, leader: 0 };
 
 // ═══════════════════════════════════════════
 // SAFE GET ELEMENT
 // ═══════════════════════════════════════════
 function get(id) {
   return document.getElementById(id);
+}
+
+// ═══════════════════════════════════════════
+// XSS PROTECTION
+// ═══════════════════════════════════════════
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 // ═══════════════════════════════════════════
@@ -56,6 +69,8 @@ async function doLogin() {
   if (!pw) { get('err-loginPw')?.classList.add('show'); hasErr = true; }
   if (hasErr) return;
 
+  const btn = document.querySelector('#panelLogin .auth-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Signing in...'; }
   try {
     const res = await fetch('/api/login', {
       method: 'POST',
@@ -73,6 +88,8 @@ async function doLogin() {
     }
   } catch (e) {
     if (alert) { alert.className = 'auth-alert error'; alert.textContent = 'Server error. Please try again.'; }
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Sign In →'; }
   }
 }
 
@@ -95,7 +112,15 @@ async function doSignup() {
   let hasErr = false;
   if (!fn) { get('err-signupFirst')?.classList.add('show'); hasErr = true; }
   if (!un || un.length < 3) { get('err-signupUser')?.classList.add('show'); hasErr = true; }
-  if (!em || !em.includes('@')) { get('err-signupEmail')?.classList.add('show'); hasErr = true; }
+  const emailRegex = /^[a-zA-Z0-9]+@gmail\.com$/i;
+  if (!em || !emailRegex.test(em)) {
+    const errEl = get('err-signupEmail');
+    if (errEl) {
+      errEl.textContent = 'Please use only letters and numbers (example: user123@gmail.com)';
+      errEl.classList.add('show');
+    }
+    hasErr = true;
+  }
   if (!pw || pw.length < 6) { get('err-signupPw')?.classList.add('show'); hasErr = true; }
   if (pw !== pwc) { get('err-signupPwConfirm')?.classList.add('show'); hasErr = true; }
   if (hasErr) return;
@@ -105,6 +130,8 @@ async function doSignup() {
     return;
   }
 
+  const btn = document.querySelector('#panelSignup .auth-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Creating account...'; }
   try {
     const res = await fetch('/api/signup', {
       method: 'POST',
@@ -122,6 +149,8 @@ async function doSignup() {
     }
   } catch (e) {
     if (alert) { alert.className = 'auth-alert error'; alert.textContent = 'Server error. Please try again.'; }
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Create Account →'; }
   }
 }
 
@@ -214,6 +243,10 @@ async function doLogout() {
   try { await fetch('/api/logout', { method: 'POST' }); } catch (e) { }
   currentUser = null;
   students = [];
+  // Clear sensitive UI
+  if (get('udName')) get('udName').textContent = '—';
+  if (get('udEmail')) get('udEmail').textContent = '—';
+  if (get('userAvatar')) get('userAvatar').textContent = '?';
   get('authScreen').style.display = 'flex';
   showPanel('panelLogin');
 }
@@ -286,15 +319,35 @@ function showPage(id) {
 // STEP NAVIGATION
 // ═══════════════════════════════════════════
 function goStep(dir) {
-  if (dir === 1 && currentStep === 1) {
-    // Validate step 1
-    const name = get('name')?.value?.trim();
-    const reg = get('register_no')?.value?.trim();
+  if (dir === 1) {
     let hasErr = false;
-    if (!name) { if (get('err-name')) get('err-name').textContent = 'Name is required'; hasErr = true; }
-    else { if (get('err-name')) get('err-name').textContent = ''; }
-    if (!reg) { if (get('err-reg')) get('err-reg').textContent = 'Register number is required'; hasErr = true; }
-    else { if (get('err-reg')) get('err-reg').textContent = ''; }
+    // ── Step 1: Basic Info ──
+    if (currentStep === 1) {
+      const name = get('name')?.value?.trim();
+      const reg = get('register_no')?.value?.trim();
+      const dept = get('dept')?.value;
+      const sem = get('semester')?.value;
+      const acad = get('acad_year')?.value;
+      const gender = get('gender')?.value;
+
+      if (!name) { if (get('err-name')) get('err-name').textContent = 'Name is required'; hasErr = true; }
+      else { if (get('err-name')) get('err-name').textContent = ''; }
+      if (!reg) { if (get('err-reg')) get('err-reg').textContent = 'Register number is required'; hasErr = true; }
+      else { if (get('err-reg')) get('err-reg').textContent = ''; }
+      if (!dept) { showToast('⚠️ Please select a Department'); hasErr = true; }
+      if (!sem) { showToast('⚠️ Please select a Semester'); hasErr = true; }
+      if (!acad) { showToast('⚠️ Please select Academic Year'); hasErr = true; }
+      if (!gender) { showToast('⚠️ Please select Gender'); hasErr = true; }
+    }
+    // ── Step 2: Academic ──
+    if (currentStep === 2) {
+      const att = parseInt(get('attendance')?.value || '0');
+      const hrs = parseInt(get('hour_study')?.value || '0');
+      const internal = get('internal')?.value?.trim();
+      if (att <= 0) { showToast('⚠️ Attendance must be greater than 0%'); hasErr = true; }
+      if (hrs <= 0) { showToast('⚠️ Study Hours must be greater than 0'); hasErr = true; }
+      if (!internal || internal === '' || isNaN(internal)) { showToast('⚠️ Internal Marks is required'); hasErr = true; }
+    }
     if (hasErr) return;
   }
 
@@ -382,11 +435,12 @@ function updateSlider(inputId, labelId, val, suffix) {
 // ═══════════════════════════════════════════
 // COUNTER ADJUST (+/-)
 // ═══════════════════════════════════════════
-function adjustCounter(id, delta) {
+function adjustCounter(id, delta, maxVal = 999) {
   const inp = get(id);
   if (!inp) return;
   let v = parseInt(inp.value) || 0;
   v = Math.max(0, v + delta);
+  if (id === 'certs') v = Math.min(v, 100);
   inp.value = v;
   liveUpdate();
 }
@@ -414,13 +468,11 @@ function updateAcadYear() {
 
   const isEngg = dept.includes('B.E') || dept.includes('B.Tech');
   const years = isEngg ? 4 : 3;
-  const currentYear = new Date().getFullYear();
 
-  sel.innerHTML = '<option value="">Select academic year</option>';
-  for (let i = 0; i < years; i++) {
-    const start = currentYear - i;
+  sel.innerHTML = '<option value="">Select batch year</option>';
+  for (let start = 2000; start <= 2026; start++) {
     const end = start + years;
-    const label = `${start} – ${end}`;
+    const label = `${start} – ${end} (Batch ${start})`;
     sel.innerHTML += `<option>${label}</option>`;
   }
 }
@@ -481,6 +533,16 @@ function getLevel(score, arrears) {
 // LIVE UPDATE (score preview sidebar)
 // ═══════════════════════════════════════════
 function liveUpdate() {
+  // Enforce Max Limits
+  const intInp = get('internal');
+  if (intInp && parseInt(intInp.value) > 100) intInp.value = 100;
+
+  const arrInp = get('arrears');
+  if (arrInp && parseInt(arrInp.value) > 50) arrInp.value = 50;
+
+  const certInp = get('certs');
+  if (certInp && parseInt(certInp.value) > 100) certInp.value = 100;
+
   const { score, arrears } = calcScore();
   const level = getLevel(score, arrears);
 
@@ -627,15 +689,15 @@ function resetForm() {
   if (get('semester')) get('semester').selectedIndex = 0;
   if (get('acad_year')) get('acad_year').innerHTML = '<option value="">— Select department first —</option>';
   if (get('gender')) get('gender').selectedIndex = 0;
-  if (get('attendance')) { get('attendance').value = 75; updateSlider('attendance', 'att-val', '75', '%'); }
-  if (get('hour_study')) { get('hour_study').value = 4; updateSlider('hour_study', 'hrs-val', '4', ' hrs'); }
+  if (get('attendance')) { get('attendance').value = 0; updateSlider('attendance', 'att-val', '0', '%'); }
+  if (get('hour_study')) { get('hour_study').value = 0; updateSlider('hour_study', 'hrs-val', '0', ' hrs'); }
   if (get('internal')) get('internal').value = '';
   if (get('arrears')) get('arrears').value = '0';
   if (get('class_rank')) get('class_rank').value = '';
   if (get('projects')) get('projects').value = '0';
   if (get('internships')) get('internships').value = '0';
   if (get('certs')) get('certs').value = '0';
-  chipVals = { sports: 1, outer_programs: 2, leader: 0 };
+  chipVals = { sports: 0, outer_programs: 0, leader: 0 };
 
   currentStep = 1;
   updateStepUI();
@@ -655,25 +717,44 @@ function showResult(s) {
   if (get('modalScore')) get('modalScore').textContent = score;
 
   const titleMap = {
-    advanced: '🟢 ADVANCED',
-    adv_intermediate: '🟣 ADV. INTERMEDIATE',
-    intermediate: '🔵 INTERMEDIATE',
-    basic: '🟡 BASIC',
-    ineligible: '🔴 NOT ELIGIBLE'
+    advanced: 'Advanced – Outstanding!',
+    adv_intermediate: 'Advanced Intermediate – Great Work!',
+    intermediate: 'Intermediate – Good Effort',
+    basic: 'Basic – Needs Improvement',
+    ineligible: 'Not Eligible'
   };
   if (get('modalTitle')) get('modalTitle').textContent = titleMap[level] || level.toUpperCase();
 
-  const colorMap = {
-    advanced: 'linear-gradient(135deg,#059669,#10b981)',
-    adv_intermediate: 'linear-gradient(135deg,#7c3aed,#8b5cf6)',
-    intermediate: 'linear-gradient(135deg,#2563eb,#3b82f6)',
-    basic: 'linear-gradient(135deg,#d97706,#f59e0b)',
-    ineligible: 'linear-gradient(135deg,#dc2626,#ef4444)'
+  const subMap = {
+    advanced: 'Exceptional performance! Keep up the excellent work to maintain this top tier.',
+    adv_intermediate: 'Impressive performance! A few more projects or internships will take you to Advanced.',
+    intermediate: 'Good performance! Increase your study hours and participation to reach the next level.',
+    basic: 'Passing performance. Focus on improving your internal marks and attendance.',
+    ineligible: 'Student has active arrears or score below 30. Clearance & improvement required.'
   };
-  const band = get('modalBand');
-  if (band) band.style.background = colorMap[level] || colorMap.basic;
+  if (get('modalSub')) get('modalSub').textContent = subMap[level] || '';
 
-  if (get('modalSub')) get('modalSub').textContent = s.name + ' — ' + s.register_no;
+  const colorMap = {
+    advanced: '#d1fae5',
+    adv_intermediate: '#e0e7ff',
+    intermediate: '#dbeafe',
+    basic: '#fef3c7',
+    ineligible: '#ffe4e6'
+  };
+  const iconMap = {
+    advanced: '🌟',
+    adv_intermediate: '🌟',
+    intermediate: '👍',
+    basic: '⚠️',
+    ineligible: '❌'
+  };
+  if (get('modalIcon')) get('modalIcon').textContent = iconMap[level] || '🎓';
+
+  const band = get('modalBand');
+  if (band) {
+    band.style.background = colorMap[level] || colorMap.basic;
+    band.style.color = '#111827';
+  }
 
   // Result grid
   const grid = get('modalGrid');
@@ -682,10 +763,10 @@ function showResult(s) {
       { l: 'Attendance', v: s.attendance + '%' },
       { l: 'Study Hours', v: s.hour_study + ' hrs' },
       { l: 'Internal', v: s.internal + '/100' },
-      { l: 'Arrears', v: s.arrears },
       { l: 'Projects', v: s.projects },
       { l: 'Internships', v: s.internships },
-    ].map(f => `<div style="text-align:center;padding:10px;background:rgba(255,255,255,.1);border-radius:8px"><div style="font-size:.72rem;opacity:.7">${f.l}</div><div style="font-size:1.1rem;font-weight:700;margin-top:2px">${f.v}</div></div>`).join('');
+      { l: 'Arrears', v: s.arrears },
+    ].map(f => `<div style="text-align:center;padding:12px;background:#f9fafb;border-radius:8px;border:1px solid #f3f4f6"><div style="font-size:1.15rem;font-weight:800;color:#111827">${f.v}</div><div style="font-size:.7rem;color:#6b7280;margin-top:2px">${f.l}</div></div>`).join('');
   }
 
   overlay.classList.add('show');
@@ -762,10 +843,10 @@ function renderDashboard() {
         <div style="display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border)">
           <div style="width:36px;height:36px;border-radius:10px;background:rgba(37,99,235,.1);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0">📝</div>
           <div style="flex:1;min-width:0">
-            <div style="font-size:.82rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.name}</div>
-            <div style="font-size:.72rem;color:var(--muted)">${s.dept || 'No dept'} — Score: ${s.score}</div>
+            <div style="font-size:.82rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${escapeHtml(s.name)}</div>
+            <div style="font-size:.72rem;color:var(--muted)">${escapeHtml(s.dept) || 'No dept'} — Score: ${s.score}</div>
           </div>
-          <div style="font-size:.7rem;color:var(--muted);flex-shrink:0">${s.date_added || ''}</div>
+          <div style="font-size:.7rem;color:var(--muted);flex-shrink:0">${escapeHtml(s.date_added) || ''}</div>
         </div>
       `).join('');
     }
@@ -835,8 +916,8 @@ function renderDashboard() {
         <div style="display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--border)">
           <span style="font-size:1.1rem">${medals[i] || ''}</span>
           <div style="flex:1;min-width:0">
-            <div style="font-size:.82rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.name}</div>
-            <div style="font-size:.7rem;color:var(--muted)">${s.dept || ''}</div>
+            <div style="font-size:.82rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(s.name)}</div>
+            <div style="font-size:.7rem;color:var(--muted)">${escapeHtml(s.dept) || ''}</div>
           </div>
           <div style="font-size:.88rem;font-weight:800;color:var(--primary)">${s.score}</div>
         </div>
@@ -858,7 +939,7 @@ function renderDashboard() {
         return `
           <div style="padding:8px 16px">
             <div style="display:flex;justify-content:space-between;font-size:.78rem;margin-bottom:4px">
-              <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px">${d}</span>
+              <span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:160px">${escapeHtml(d)}</span>
               <span style="font-weight:700">${c}</span>
             </div>
             <div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden">
@@ -926,12 +1007,12 @@ function renderTable() {
     <tr>
       <td>${i + 1}</td>
       <td>
-        <div style="font-weight:600">${s.name}</div>
-        <div style="font-size:.72rem;color:var(--muted)">${s.register_no}</div>
+        <div style="font-weight:600">${escapeHtml(s.name)}</div>
+        <div style="font-size:.72rem;color:var(--muted)">${escapeHtml(s.register_no)}</div>
       </td>
-      <td style="font-size:.78rem">${s.dept || '—'}</td>
-      <td style="font-size:.78rem">${s.semester || '—'}</td>
-      <td style="font-size:.78rem">${s.acad_year || '—'}</td>
+      <td style="font-size:.78rem">${escapeHtml(s.dept) || '—'}</td>
+      <td style="font-size:.78rem">${escapeHtml(s.semester) || '—'}</td>
+      <td style="font-size:.78rem">${escapeHtml(s.acad_year) || '—'}</td>
       <td>${s.attendance || 0}%</td>
       <td>${s.hour_study || 0}</td>
       <td>${s.internal || 0}</td>
@@ -949,10 +1030,16 @@ function renderTable() {
 async function deleteStudent(id) {
   if (!confirm('Delete this student record?')) return;
   try {
-    await fetch('/api/students/' + id, { method: 'DELETE' });
-    students = students.filter(s => s.id !== id);
-    renderDashboard();
-    updateHeroStats();
+    const res = await fetch('/api/students/' + id, { method: 'DELETE' });
+    const data = await res.json();
+    if (data.ok) {
+      students = students.filter(s => s.id !== id);
+      renderDashboard();
+      updateHeroStats();
+      showToast('✅ Student deleted');
+    } else {
+      showToast('❌ ' + (data.msg || 'Error deleting'));
+    }
   } catch (e) {
     showToast('❌ Error deleting');
   }
@@ -1115,7 +1202,7 @@ function renderAnalytics() {
           <div style="display:flex;align-items:center;gap:10px;padding:8px 12px">
             <span style="font-weight:800;font-size:.85rem;color:var(--muted);min-width:20px">${i + 1}</span>
             <div style="flex:1;min-width:0">
-              <div style="font-size:.82rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.name}</div>
+              <div style="font-size:.82rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHtml(s.name)}</div>
               <div style="height:5px;background:var(--border);border-radius:3px;margin-top:4px;overflow:hidden">
                 <div style="height:100%;width:${pct}%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:3px"></div>
               </div>
