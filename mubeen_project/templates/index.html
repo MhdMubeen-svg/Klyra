@@ -7,7 +7,7 @@
   <meta name="description"
     content="Klyra — A student performance evaluation and management system. Score, classify, and monitor student academic performance in real time.">
   <link rel="icon"
-    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='fg' x1='0' y1='1' x2='1' y2='0'><stop offset='0%25' stop-color='%237c3aed'/><stop offset='50%25' stop-color='%23f59e0b'/><stop offset='100%25' stop-color='%23ef4444'/></linearGradient></defs><path d='M15,70 Q50,45 50,45 Q50,45 85,70 L75,72 Q50,55 50,55 Q50,55 25,72 Z' fill='%236366f1'/><path d='M25,68 Q50,50 50,50 L50,30 Q35,20 25,30 Z' fill='%23f59e0b'/><path d='M75,68 Q50,50 50,50 L50,30 Q65,20 75,30 Z' fill='%23ef4444'/><rect x='42' y='8' width='16' height='4' rx='1' fill='%231e1b4b'/><polygon points='42,12 50,20 58,12' fill='%231e1b4b'/><line x1='50' y1='20' x2='50' y2='26' stroke='%23f59e0b' stroke-width='2'/><circle cx='50' cy='27' r='2' fill='%23f59e0b'/></svg>">
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><path d='M8,52 Q32,42 32,42 Q32,42 56,52 L52,54 Q32,46 32,46 Q32,46 12,54 Z' fill='%236366f1'/><path d='M12,50 Q32,42 32,42 L32,34 Q22,28 12,34 Z' fill='%234f46e5' opacity='.6'/><path d='M52,50 Q32,42 32,42 L32,34 Q42,28 52,34 Z' fill='%238b5cf6' opacity='.6'/><rect x='16' y='28' width='6' height='14' rx='2' fill='%233b82f6'/><rect x='24' y='22' width='6' height='20' rx='2' fill='%236366f1'/><rect x='32' y='16' width='6' height='26' rx='2' fill='%238b5cf6'/><rect x='40' y='10' width='6' height='32' rx='2' fill='%23f59e0b'/><polyline points='19,27 27,21 35,15 43,9' fill='none' stroke='%23ec4899' stroke-width='1.5' stroke-dasharray='2,2'/><rect x='38' y='4' width='12' height='3' rx='1' fill='%231e1b4b'/><polygon points='38,7 44,12 50,7' fill='%231e1b4b'/><line x1='48' y1='5.5' x2='52' y2='9' stroke='%23f59e0b' stroke-width='1.5'/><circle cx='52.5' cy='9.5' r='1.5' fill='%23f59e0b'/></svg>">
   <title>Klyra — Student Performance System</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Instrument+Sans:wght@300;400;500;600&display=swap"
@@ -27,35 +27,52 @@
     <div class="auth-left">
       <div class="auth-brand">
         <div class="auth-brand-icon">
-          <svg viewBox="0 0 48 48">
+          <svg viewBox="0 0 64 64">
             <defs>
-              <linearGradient id="bookLeft" x1="0" y1="0" x2="0.5" y2="1">
-                <stop offset="0%" stop-color="#f59e0b" />
-                <stop offset="100%" stop-color="#f97316" />
+              <linearGradient id="aBar1" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0%" stop-color="#3b82f6" />
+                <stop offset="100%" stop-color="#60a5fa" />
               </linearGradient>
-              <linearGradient id="bookRight" x1="0.5" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#ef4444" />
-                <stop offset="100%" stop-color="#ec4899" />
-              </linearGradient>
-              <linearGradient id="bookSpine" x1="0" y1="1" x2="1" y2="0">
+              <linearGradient id="aBar2" x1="0" y1="1" x2="0" y2="0">
                 <stop offset="0%" stop-color="#6366f1" />
+                <stop offset="100%" stop-color="#818cf8" />
+              </linearGradient>
+              <linearGradient id="aBar3" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0%" stop-color="#8b5cf6" />
+                <stop offset="100%" stop-color="#a78bfa" />
+              </linearGradient>
+              <linearGradient id="aBar4" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0%" stop-color="#f59e0b" />
+                <stop offset="100%" stop-color="#fbbf24" />
+              </linearGradient>
+              <linearGradient id="aBook" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#4f46e5" />
+                <stop offset="50%" stop-color="#6366f1" />
                 <stop offset="100%" stop-color="#8b5cf6" />
               </linearGradient>
             </defs>
-            <!-- Open book pages -->
-            <path d="M6,36 Q24,24 24,24 L24,12 Q16,6 6,14 Z" fill="url(#bookLeft)" />
-            <path d="M42,36 Q24,24 24,24 L24,12 Q32,6 42,14 Z" fill="url(#bookRight)" />
-            <!-- Book spine -->
-            <path d="M6,36 Q24,28 24,28 Q24,28 42,36 L38,38 Q24,30 24,30 Q24,30 10,38 Z" fill="url(#bookSpine)" />
-            <!-- Center page crease -->
-            <path d="M22,12 Q24,14 24,24" stroke="#fff" stroke-width="0.5" fill="none" opacity=".4" />
-            <path d="M26,12 Q24,14 24,24" stroke="#fff" stroke-width="0.5" fill="none" opacity=".4" />
-            <!-- Graduation cap -->
-            <rect x="16" y="3" width="16" height="3.5" rx="1" fill="#1e1b4b" />
-            <polygon points="16,6.5 24,12 32,6.5" fill="#1e1b4b" />
+            <!-- Open book base -->
+            <path d="M8,52 Q32,42 32,42 Q32,42 56,52 L52,54 Q32,46 32,46 Q32,46 12,54 Z" fill="url(#aBook)" />
+            <path d="M12,50 Q32,42 32,42 L32,34 Q22,28 12,34 Z" fill="#4f46e5" opacity=".5" />
+            <path d="M52,50 Q32,42 32,42 L32,34 Q42,28 52,34 Z" fill="#8b5cf6" opacity=".5" />
+            <!-- Rising bar charts -->
+            <rect x="16" y="28" width="6" height="14" rx="2" fill="url(#aBar1)" />
+            <rect x="24" y="22" width="6" height="20" rx="2" fill="url(#aBar2)" />
+            <rect x="32" y="16" width="6" height="26" rx="2" fill="url(#aBar3)" />
+            <rect x="40" y="10" width="6" height="32" rx="2" fill="url(#aBar4)" />
+            <!-- Analytics trend line -->
+            <polyline points="19,27 27,21 35,15 43,9" fill="none" stroke="#ec4899" stroke-width="1.5"
+              stroke-dasharray="2,2" stroke-linecap="round" />
+            <circle cx="19" cy="27" r="1.5" fill="#ec4899" />
+            <circle cx="27" cy="21" r="1.5" fill="#ec4899" />
+            <circle cx="35" cy="15" r="1.5" fill="#ec4899" />
+            <circle cx="43" cy="9" r="1.5" fill="#ec4899" />
+            <!-- Graduation cap on tallest bar -->
+            <rect x="38" y="4" width="12" height="3" rx="1" fill="#1e1b4b" />
+            <polygon points="38,7 44,12 50,7" fill="#1e1b4b" />
             <!-- Tassel -->
-            <line x1="30" y1="5" x2="34" y2="10" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round" />
-            <circle cx="34.5" cy="11" r="1.5" fill="#f59e0b" />
+            <line x1="48" y1="5.5" x2="52" y2="9" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round" />
+            <circle cx="52.5" cy="9.5" r="1.5" fill="#f59e0b" />
           </svg>
         </div>
         <div class="auth-brand-name">Klyra</div>
@@ -259,30 +276,47 @@
   <nav class="topbar">
     <div class="brand">
       <div class="brand-icon">
-        <svg viewBox="0 0 48 48">
+        <svg viewBox="0 0 64 64">
           <defs>
-            <linearGradient id="nbLeft" x1="0" y1="0" x2="0.5" y2="1">
-              <stop offset="0%" stop-color="#f59e0b" />
-              <stop offset="100%" stop-color="#f97316" />
+            <linearGradient id="nBar1" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0%" stop-color="#3b82f6" />
+              <stop offset="100%" stop-color="#60a5fa" />
             </linearGradient>
-            <linearGradient id="nbRight" x1="0.5" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#ef4444" />
-              <stop offset="100%" stop-color="#ec4899" />
-            </linearGradient>
-            <linearGradient id="nbSpine" x1="0" y1="1" x2="1" y2="0">
+            <linearGradient id="nBar2" x1="0" y1="1" x2="0" y2="0">
               <stop offset="0%" stop-color="#6366f1" />
+              <stop offset="100%" stop-color="#818cf8" />
+            </linearGradient>
+            <linearGradient id="nBar3" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0%" stop-color="#8b5cf6" />
+              <stop offset="100%" stop-color="#a78bfa" />
+            </linearGradient>
+            <linearGradient id="nBar4" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0%" stop-color="#f59e0b" />
+              <stop offset="100%" stop-color="#fbbf24" />
+            </linearGradient>
+            <linearGradient id="nBook" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stop-color="#4f46e5" />
+              <stop offset="50%" stop-color="#6366f1" />
               <stop offset="100%" stop-color="#8b5cf6" />
             </linearGradient>
           </defs>
-          <path d="M6,36 Q24,24 24,24 L24,12 Q16,6 6,14 Z" fill="url(#nbLeft)" />
-          <path d="M42,36 Q24,24 24,24 L24,12 Q32,6 42,14 Z" fill="url(#nbRight)" />
-          <path d="M6,36 Q24,28 24,28 Q24,28 42,36 L38,38 Q24,30 24,30 Q24,30 10,38 Z" fill="url(#nbSpine)" />
-          <path d="M22,12 Q24,14 24,24" stroke="#fff" stroke-width="0.5" fill="none" opacity=".4" />
-          <path d="M26,12 Q24,14 24,24" stroke="#fff" stroke-width="0.5" fill="none" opacity=".4" />
-          <rect x="16" y="3" width="16" height="3.5" rx="1" fill="#1e1b4b" />
-          <polygon points="16,6.5 24,12 32,6.5" fill="#1e1b4b" />
-          <line x1="30" y1="5" x2="34" y2="10" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round" />
-          <circle cx="34.5" cy="11" r="1.5" fill="#f59e0b" />
+          <path d="M8,52 Q32,42 32,42 Q32,42 56,52 L52,54 Q32,46 32,46 Q32,46 12,54 Z" fill="url(#nBook)" />
+          <path d="M12,50 Q32,42 32,42 L32,34 Q22,28 12,34 Z" fill="#4f46e5" opacity=".5" />
+          <path d="M52,50 Q32,42 32,42 L32,34 Q42,28 52,34 Z" fill="#8b5cf6" opacity=".5" />
+          <rect x="16" y="28" width="6" height="14" rx="2" fill="url(#nBar1)" />
+          <rect x="24" y="22" width="6" height="20" rx="2" fill="url(#nBar2)" />
+          <rect x="32" y="16" width="6" height="26" rx="2" fill="url(#nBar3)" />
+          <rect x="40" y="10" width="6" height="32" rx="2" fill="url(#nBar4)" />
+          <polyline points="19,27 27,21 35,15 43,9" fill="none" stroke="#ec4899" stroke-width="1.5"
+            stroke-dasharray="2,2" stroke-linecap="round" />
+          <circle cx="19" cy="27" r="1.5" fill="#ec4899" />
+          <circle cx="27" cy="21" r="1.5" fill="#ec4899" />
+          <circle cx="35" cy="15" r="1.5" fill="#ec4899" />
+          <circle cx="43" cy="9" r="1.5" fill="#ec4899" />
+          <rect x="38" y="4" width="12" height="3" rx="1" fill="#1e1b4b" />
+          <polygon points="38,7 44,12 50,7" fill="#1e1b4b" />
+          <line x1="48" y1="5.5" x2="52" y2="9" stroke="#f59e0b" stroke-width="1.5" stroke-linecap="round" />
+          <circle cx="52.5" cy="9.5" r="1.5" fill="#f59e0b" />
         </svg>
       </div>
       Klyra
