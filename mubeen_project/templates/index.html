@@ -121,7 +121,8 @@
           <label>Username or Email</label>
           <div class="auth-field-wrap">
             <span class="field-icon">👤</span>
-            <input type="text" id="loginUser" placeholder="Enter your username or email" autocomplete="username">
+            <input type="text" id="loginUser" placeholder="Enter your username or email" autocomplete="username"
+              onkeydown="if(event.key==='Enter')doLogin()">
           </div>
           <span class="auth-err-msg" id="err-loginUser">Please enter your username or email</span>
         </div>
@@ -130,7 +131,8 @@
           <label>Password</label>
           <div class="auth-field-wrap">
             <span class="field-icon">🔒</span>
-            <input type="password" id="loginPw" placeholder="Enter your password" autocomplete="current-password">
+            <input type="password" id="loginPw" placeholder="Enter your password" autocomplete="current-password"
+              onkeydown="if(event.key==='Enter')doLogin()">
             <button class="show-pw-btn" type="button" onclick="togglePw('loginPw',this)">Show</button>
           </div>
           <span class="auth-err-msg" id="err-loginPw">Please enter your password</span>
