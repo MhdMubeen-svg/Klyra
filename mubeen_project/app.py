@@ -7,7 +7,10 @@ from ml_model import predict_student
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', os.urandom(24).hex())
-DB = 'mubeen.db'
+
+# ── Database path (absolute, next to this script) ──
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB = os.environ.get('DATABASE_PATH', os.path.join(BASE_DIR, 'mubeen.db'))
 
 # ══ DATABASE ══════════════════════════════
 def get_db():
