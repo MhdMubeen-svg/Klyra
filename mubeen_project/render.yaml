@@ -10,3 +10,5 @@ services:
         value: production
       - key: SECRET_KEY
         generateValue: true
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:npg_3UWnGdya8BLl@ep-morning-rice-aiedlc6c-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require

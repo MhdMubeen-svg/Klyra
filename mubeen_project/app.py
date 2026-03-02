@@ -1,6 +1,7 @@
 import os
 from flask import Flask, render_template, request, jsonify, session
-import sqlite3
+import psycopg2
+import psycopg2.extras
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import date
 from ml_model import predict_student
@@ -8,37 +9,40 @@ from ml_model import predict_student
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', os.urandom(24).hex())
 
-# ── Database path (absolute, next to this script) ──
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DB = os.environ.get('DATABASE_PATH', os.path.join(BASE_DIR, 'mubeen.db'))
+# ── Database URL (Neon PostgreSQL) ──
+DATABASE_URL = os.environ.get(
+    'DATABASE_URL',
+    'postgresql://neondb_owner:npg_3UWnGdya8BLl@ep-morning-rice-aiedlc6c-pooler.c-4.us-east-1.aws.neon.tech/neondb?sslmode=require'
+)
 
 # ══ DATABASE ══════════════════════════════
 def get_db():
-    conn = sqlite3.connect(DB)
-    conn.row_factory = sqlite3.Row
+    conn = psycopg2.connect(DATABASE_URL)
+    conn.autocommit = False
     return conn
 
 def init_db():
     conn = get_db()
     try:
-        conn.execute('''CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username  TEXT UNIQUE NOT NULL,
-            email     TEXT UNIQUE NOT NULL,
+        cur = conn.cursor()
+        cur.execute('''CREATE TABLE IF NOT EXISTS users (
+            id SERIAL PRIMARY KEY,
+            username  VARCHAR(100) UNIQUE NOT NULL,
+            email     VARCHAR(200) UNIQUE NOT NULL,
             password  TEXT NOT NULL,
-            firstName TEXT NOT NULL,
-            lastName  TEXT DEFAULT '',
-            createdAt TEXT DEFAULT (date('now'))
+            firstName VARCHAR(100) NOT NULL,
+            lastName  VARCHAR(100) DEFAULT '',
+            createdAt TEXT DEFAULT CURRENT_DATE
         )''')
-        conn.execute('''CREATE TABLE IF NOT EXISTS students (
-            id             INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id        INTEGER NOT NULL,
-            name           TEXT NOT NULL,
-            register_no    TEXT NOT NULL,
+        cur.execute('''CREATE TABLE IF NOT EXISTS students (
+            id             SERIAL PRIMARY KEY,
+            user_id        INTEGER NOT NULL REFERENCES users(id),
+            name           VARCHAR(200) NOT NULL,
+            register_no    VARCHAR(100) NOT NULL,
             dept           TEXT DEFAULT '',
             semester       TEXT DEFAULT '',
             acad_year      TEXT DEFAULT '',
-            gender         TEXT DEFAULT '',
+            gender         VARCHAR(20) DEFAULT '',
             attendance     INTEGER DEFAULT 0,
             hour_study     INTEGER DEFAULT 0,
             internal       INTEGER DEFAULT 0,
@@ -54,20 +58,18 @@ def init_db():
             level          TEXT DEFAULT 'basic',
             dt_prediction  TEXT DEFAULT '',
             rf_prediction  TEXT DEFAULT '',
-            date_added     TEXT DEFAULT (date('now')),
-            FOREIGN KEY (user_id) REFERENCES users(id)
+            date_added     TEXT DEFAULT CURRENT_DATE
         )''')
-        # ── Migrate existing DB: add ML columns if missing ──
-        cols = [row[1] for row in conn.execute('PRAGMA table_info(students)').fetchall()]
-        if 'dt_prediction' not in cols:
-            conn.execute("ALTER TABLE students ADD COLUMN dt_prediction TEXT DEFAULT ''")
-        if 'rf_prediction' not in cols:
-            conn.execute("ALTER TABLE students ADD COLUMN rf_prediction TEXT DEFAULT ''")
         conn.commit()
+        cur.close()
+    except Exception as e:
+        conn.rollback()
+        print(f"[DB INIT] Error: {e}")
     finally:
         conn.close()
 
 init_db()
+print("[OK] PostgreSQL database connected and tables ready")
 
 # ══ HELPERS ═══════════════════════════════
 def safe_int(value, default=0, min_val=None, max_val=None):
@@ -115,7 +117,10 @@ def current_user():
         return None
     conn = get_db()
     try:
-        u = conn.execute('SELECT * FROM users WHERE id=?', (uid,)).fetchone()
+        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute('SELECT * FROM users WHERE id=%s', (uid,))
+        u = cur.fetchone()
+        cur.close()
         return dict(u) if u else None
     finally:
         conn.close()
@@ -126,9 +131,9 @@ def user_dict(u):
         'id': u['id'],
         'username': u['username'],
         'email': u['email'],
-        'firstName': u['firstName'],
-        'lastName': u['lastName'] or '',
-        'createdAt': u['createdAt']
+        'firstName': u['firstname'],
+        'lastName': u.get('lastname') or '',
+        'createdAt': u.get('createdat') or ''
     }
 
 # ══ PAGE ══════════════════════════════════
@@ -148,10 +153,13 @@ def api_login():
         return jsonify({'ok': False, 'msg': 'Please fill in all fields.'})
     conn = get_db()
     try:
-        u = conn.execute(
-            'SELECT * FROM users WHERE username=? OR email=?',
+        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(
+            'SELECT * FROM users WHERE username=%s OR email=%s',
             (ident, ident.lower())
-        ).fetchone()
+        )
+        u = cur.fetchone()
+        cur.close()
     finally:
         conn.close()
     if not u:
@@ -181,16 +189,23 @@ def api_signup():
         return jsonify({'ok': False, 'field': 'email', 'msg': 'Please enter a valid email address.'})
     conn = get_db()
     try:
-        if conn.execute('SELECT id FROM users WHERE username=?', (un,)).fetchone():
+        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute('SELECT id FROM users WHERE username=%s', (un,))
+        if cur.fetchone():
+            cur.close()
             return jsonify({'ok': False, 'field': 'username', 'msg': 'Username already taken.'})
-        if conn.execute('SELECT id FROM users WHERE email=?', (em,)).fetchone():
+        cur.execute('SELECT id FROM users WHERE email=%s', (em,))
+        if cur.fetchone():
+            cur.close()
             return jsonify({'ok': False, 'field': 'email', 'msg': 'Email already registered.'})
-        conn.execute(
-            'INSERT INTO users (username,email,password,firstName,lastName) VALUES (?,?,?,?,?)',
+        cur.execute(
+            'INSERT INTO users (username,email,password,firstName,lastName) VALUES (%s,%s,%s,%s,%s)',
             (un, em, generate_password_hash(pw), fn, ln)
         )
         conn.commit()
-        u = conn.execute('SELECT * FROM users WHERE username=?', (un,)).fetchone()
+        cur.execute('SELECT * FROM users WHERE username=%s', (un,))
+        u = cur.fetchone()
+        cur.close()
     finally:
         conn.close()
     session['user_id'] = u['id']
@@ -213,7 +228,10 @@ def api_check_username():
     un = (request.args.get('u') or '').strip()
     conn = get_db()
     try:
-        taken = conn.execute('SELECT id FROM users WHERE username=?', (un,)).fetchone() is not None
+        cur = conn.cursor()
+        cur.execute('SELECT id FROM users WHERE username=%s', (un,))
+        taken = cur.fetchone() is not None
+        cur.close()
     finally:
         conn.close()
     return jsonify({'taken': taken})
@@ -226,10 +244,13 @@ def api_get_students():
         return jsonify({'ok': False, 'msg': 'Not logged in'}), 401
     conn = get_db()
     try:
-        rows = conn.execute(
-            'SELECT * FROM students WHERE user_id=? ORDER BY score DESC',
+        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(
+            'SELECT * FROM students WHERE user_id=%s ORDER BY score DESC',
             (u['id'],)
-        ).fetchall()
+        )
+        rows = cur.fetchall()
+        cur.close()
     finally:
         conn.close()
     return jsonify({'ok': True, 'students': [dict(r) for r in rows]})
@@ -263,12 +284,14 @@ def api_add_student():
 
     conn = get_db()
     try:
-        cur = conn.execute('''INSERT INTO students
+        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute('''INSERT INTO students
             (user_id,name,register_no,dept,semester,acad_year,gender,
              attendance,hour_study,internal,arrears,projects,internships,
              sports,outer_programs,certs,leader,class_rank,score,level,
              dt_prediction,rf_prediction,date_added)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''', (
+            VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
+            RETURNING id''', (
             u['id'], name, register_no,
             (d.get('dept') or '').strip(), (d.get('semester') or '').strip(),
             (d.get('acad_year') or '').strip(), (d.get('gender') or '').strip(),
@@ -280,9 +303,11 @@ def api_add_student():
             (d.get('class_rank') or '').strip(), score, level,
             dt_pred, rf_pred, today
         ))
-        new_id = cur.lastrowid
+        new_id = cur.fetchone()['id']
         conn.commit()
-        student = conn.execute('SELECT * FROM students WHERE id=?', (new_id,)).fetchone()
+        cur.execute('SELECT * FROM students WHERE id=%s', (new_id,))
+        student = cur.fetchone()
+        cur.close()
     finally:
         conn.close()
     return jsonify({
@@ -298,8 +323,10 @@ def api_delete_student(sid):
         return jsonify({'ok': False}), 401
     conn = get_db()
     try:
-        conn.execute('DELETE FROM students WHERE id=? AND user_id=?', (sid, u['id']))
+        cur = conn.cursor()
+        cur.execute('DELETE FROM students WHERE id=%s AND user_id=%s', (sid, u['id']))
         conn.commit()
+        cur.close()
     finally:
         conn.close()
     return jsonify({'ok': True})
@@ -311,8 +338,10 @@ def api_clear_students():
         return jsonify({'ok': False}), 401
     conn = get_db()
     try:
-        conn.execute('DELETE FROM students WHERE user_id=?', (u['id'],))
+        cur = conn.cursor()
+        cur.execute('DELETE FROM students WHERE user_id=%s', (u['id'],))
         conn.commit()
+        cur.close()
     finally:
         conn.close()
     return jsonify({'ok': True})
